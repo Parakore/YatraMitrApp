@@ -19,6 +19,15 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
 
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.saffron,
+        foregroundColor: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+
       // AppBar Theme (Trust Blue)
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.secondary,
