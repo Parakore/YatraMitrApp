@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yatramitra/features/disaster/view/disaster_screen.dart';
 import '../../features/ai_assistant/view/ai_chat_screen.dart';
 import '../../features/emergency/view/emergency_screen.dart';
 import '../../features/home/view/home_screen.dart';
 import '../../features/nearby/view/nearby_screen.dart';
 import '../../features/crowd/view/crowd_intelligence_screen.dart';
-import '../../features/alerts/view/disaster_alerts_screen.dart';
+// import '../../features/disaster/view/disaster_screen.dart';
 import '../../shared/widgets/error_widget.dart';
 
 /// Centralized router configuration for YatraMitra.
@@ -48,11 +49,13 @@ class AppRouter {
       // Placeholder routes for now
       GoRoute(
         path: offlineMaps,
-        builder: (context, state) => const PlaceholderScreen(title: 'Offline Maps'),
+        builder: (context, state) =>
+            const PlaceholderScreen(title: 'Offline Maps'),
       ),
       GoRoute(
         path: yatraGuide,
-        builder: (context, state) => const PlaceholderScreen(title: 'Yatra Guide'),
+        builder: (context, state) =>
+            const PlaceholderScreen(title: 'Yatra Guide'),
       ),
       GoRoute(
         path: crowdIntelligence,
@@ -60,7 +63,7 @@ class AppRouter {
       ),
       GoRoute(
         path: disasterAlerts,
-        builder: (context, state) => const DisasterAlertsScreen(),
+        builder: (context, state) => const DisasterScreen(),
       ),
     ],
   );
@@ -79,7 +82,8 @@ class PlaceholderScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.construction_rounded, size: 64, color: Colors.orange),
+            const Icon(Icons.construction_rounded,
+                size: 64, color: Colors.orange),
             const SizedBox(height: 16),
             Text(
               '$title Feature Coming Soon',
