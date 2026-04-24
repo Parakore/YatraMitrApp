@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yatramitra/features/nearby/model/nearby_place.dart';
 import 'package:yatramitra/features/crowd/model/crowd_status.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_card.dart';
@@ -79,11 +80,13 @@ class NearbyScreen extends ConsumerWidget {
   Widget _buildCategoryFilter(WidgetRef ref) {
     final categories = [
       {'label': 'All', 'icon': Icons.grid_view},
-      {'label': 'Medical', 'icon': Icons.medical_services},
-      {'label': 'Oxygen', 'icon': Icons.air},
-      {'label': 'Rest', 'icon': Icons.hotel},
-      {'label': 'Police', 'icon': Icons.local_police},
+      {'label': 'Toilets', 'icon': Icons.wc},
+      {'label': 'ATM', 'icon': Icons.atm},
       {'label': 'Food', 'icon': Icons.restaurant},
+      {'label': 'Medical', 'icon': Icons.medical_services},
+      {'label': 'Rest Area', 'icon': Icons.hotel},
+      {'label': 'Police', 'icon': Icons.local_police},
+      {'label': 'Water', 'icon': Icons.water_drop},
     ];
 
     return SizedBox(
@@ -102,12 +105,19 @@ class NearbyScreen extends ConsumerWidget {
                   .filterByCategory(cat['label'] as String),
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                width: 70,
+                width: 75,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade200),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(5),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -119,6 +129,9 @@ class NearbyScreen extends ConsumerWidget {
                       cat['label'] as String,
                       style: const TextStyle(
                           fontSize: 10, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
@@ -130,22 +143,109 @@ class NearbyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPlaceCard(dynamic place) {
+  Widget _buildPlaceCard(NearbyPlace place) {
     return AppCard(
       padding: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: AppColors.secondary.withAlpha(20),
-          child: Icon(_getCategoryIcon(place.category),
-              color: AppColors.secondary),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(20),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(_getCategoryIcon(place.category),
+                      color: AppColors.primary, size: 24),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(place.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      const SizedBox(height: 2),
+                      Text(place.address,
+                          style: TextStyle(
+                              color: Colors.grey.shade600, fontSize: 13)),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(place.distanceInfo,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary)),
+                    if (place.rating > 0)
+                      Row(
+                        children: List.generate(
+                            5,
+                            (index) => Icon(
+                                  index < place.rating
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 14,
+                                  color: Colors.amber,
+                                )),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(Icons.info_outline,
+                          size: 14, color: AppColors.primary),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          place.subInfo,
+                          style: const TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: place.isSafe
+                        ? Colors.green.shade50
+                        : Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    place.statusTag,
+                    style: TextStyle(
+                      color: place.isSafe
+                          ? Colors.green.shade700
+                          : Colors.blue.shade700,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        title: Text(place.name,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text('${place.distance} km away • ${place.category}'),
-        trailing: place.isSafe
-            ? const Icon(Icons.verified_user, color: Colors.green, size: 18)
-            : const Icon(Icons.chevron_right),
-        onTap: () {},
       ),
     );
   }
@@ -154,14 +254,18 @@ class NearbyScreen extends ConsumerWidget {
     switch (category.toLowerCase()) {
       case 'medical':
         return Icons.medical_services;
-      case 'oxygen':
-        return Icons.air;
-      case 'rest':
+      case 'toilets':
+        return Icons.wc;
+      case 'atm':
+        return Icons.atm;
+      case 'rest area':
         return Icons.hotel;
       case 'police':
         return Icons.local_police;
       case 'food':
         return Icons.restaurant;
+      case 'water':
+        return Icons.water_drop;
       default:
         return Icons.location_on;
     }

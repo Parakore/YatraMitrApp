@@ -23,8 +23,12 @@ mixin _$NearbyPlace {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
-  double get distance => throw _privateConstructorUsedError;
+  String get distanceInfo => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
+  String get subInfo => throw _privateConstructorUsedError;
+  String get statusTag => throw _privateConstructorUsedError;
+  double get rating => throw _privateConstructorUsedError;
+  String? get priceRange => throw _privateConstructorUsedError;
   bool get isSafe => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,8 +47,12 @@ abstract class $NearbyPlaceCopyWith<$Res> {
       {String id,
       String name,
       String category,
-      double distance,
+      String distanceInfo,
       String address,
+      String subInfo,
+      String statusTag,
+      double rating,
+      String? priceRange,
       bool isSafe});
 }
 
@@ -64,8 +72,12 @@ class _$NearbyPlaceCopyWithImpl<$Res, $Val extends NearbyPlace>
     Object? id = null,
     Object? name = null,
     Object? category = null,
-    Object? distance = null,
+    Object? distanceInfo = null,
     Object? address = null,
+    Object? subInfo = null,
+    Object? statusTag = null,
+    Object? rating = null,
+    Object? priceRange = freezed,
     Object? isSafe = null,
   }) {
     return _then(_value.copyWith(
@@ -81,14 +93,30 @@ class _$NearbyPlaceCopyWithImpl<$Res, $Val extends NearbyPlace>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
-      distance: null == distance
-          ? _value.distance
-          : distance // ignore: cast_nullable_to_non_nullable
-              as double,
+      distanceInfo: null == distanceInfo
+          ? _value.distanceInfo
+          : distanceInfo // ignore: cast_nullable_to_non_nullable
+              as String,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
+      subInfo: null == subInfo
+          ? _value.subInfo
+          : subInfo // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusTag: null == statusTag
+          ? _value.statusTag
+          : statusTag // ignore: cast_nullable_to_non_nullable
+              as String,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double,
+      priceRange: freezed == priceRange
+          ? _value.priceRange
+          : priceRange // ignore: cast_nullable_to_non_nullable
+              as String?,
       isSafe: null == isSafe
           ? _value.isSafe
           : isSafe // ignore: cast_nullable_to_non_nullable
@@ -109,8 +137,12 @@ abstract class _$$NearbyPlaceImplCopyWith<$Res>
       {String id,
       String name,
       String category,
-      double distance,
+      String distanceInfo,
       String address,
+      String subInfo,
+      String statusTag,
+      double rating,
+      String? priceRange,
       bool isSafe});
 }
 
@@ -128,8 +160,12 @@ class __$$NearbyPlaceImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? category = null,
-    Object? distance = null,
+    Object? distanceInfo = null,
     Object? address = null,
+    Object? subInfo = null,
+    Object? statusTag = null,
+    Object? rating = null,
+    Object? priceRange = freezed,
     Object? isSafe = null,
   }) {
     return _then(_$NearbyPlaceImpl(
@@ -145,14 +181,30 @@ class __$$NearbyPlaceImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
-      distance: null == distance
-          ? _value.distance
-          : distance // ignore: cast_nullable_to_non_nullable
-              as double,
+      distanceInfo: null == distanceInfo
+          ? _value.distanceInfo
+          : distanceInfo // ignore: cast_nullable_to_non_nullable
+              as String,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
+      subInfo: null == subInfo
+          ? _value.subInfo
+          : subInfo // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusTag: null == statusTag
+          ? _value.statusTag
+          : statusTag // ignore: cast_nullable_to_non_nullable
+              as String,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double,
+      priceRange: freezed == priceRange
+          ? _value.priceRange
+          : priceRange // ignore: cast_nullable_to_non_nullable
+              as String?,
       isSafe: null == isSafe
           ? _value.isSafe
           : isSafe // ignore: cast_nullable_to_non_nullable
@@ -168,8 +220,12 @@ class _$NearbyPlaceImpl implements _NearbyPlace {
       {required this.id,
       required this.name,
       required this.category,
-      required this.distance,
+      required this.distanceInfo,
       required this.address,
+      required this.subInfo,
+      required this.statusTag,
+      this.rating = 0.0,
+      this.priceRange,
       this.isSafe = false});
 
   factory _$NearbyPlaceImpl.fromJson(Map<String, dynamic> json) =>
@@ -182,16 +238,25 @@ class _$NearbyPlaceImpl implements _NearbyPlace {
   @override
   final String category;
   @override
-  final double distance;
+  final String distanceInfo;
   @override
   final String address;
+  @override
+  final String subInfo;
+  @override
+  final String statusTag;
+  @override
+  @JsonKey()
+  final double rating;
+  @override
+  final String? priceRange;
   @override
   @JsonKey()
   final bool isSafe;
 
   @override
   String toString() {
-    return 'NearbyPlace(id: $id, name: $name, category: $category, distance: $distance, address: $address, isSafe: $isSafe)';
+    return 'NearbyPlace(id: $id, name: $name, category: $category, distanceInfo: $distanceInfo, address: $address, subInfo: $subInfo, statusTag: $statusTag, rating: $rating, priceRange: $priceRange, isSafe: $isSafe)';
   }
 
   @override
@@ -203,16 +268,22 @@ class _$NearbyPlaceImpl implements _NearbyPlace {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
-            (identical(other.distance, distance) ||
-                other.distance == distance) &&
+            (identical(other.distanceInfo, distanceInfo) ||
+                other.distanceInfo == distanceInfo) &&
             (identical(other.address, address) || other.address == address) &&
+            (identical(other.subInfo, subInfo) || other.subInfo == subInfo) &&
+            (identical(other.statusTag, statusTag) ||
+                other.statusTag == statusTag) &&
+            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.priceRange, priceRange) ||
+                other.priceRange == priceRange) &&
             (identical(other.isSafe, isSafe) || other.isSafe == isSafe));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, category, distance, address, isSafe);
+  int get hashCode => Object.hash(runtimeType, id, name, category, distanceInfo,
+      address, subInfo, statusTag, rating, priceRange, isSafe);
 
   @JsonKey(ignore: true)
   @override
@@ -233,8 +304,12 @@ abstract class _NearbyPlace implements NearbyPlace {
       {required final String id,
       required final String name,
       required final String category,
-      required final double distance,
+      required final String distanceInfo,
       required final String address,
+      required final String subInfo,
+      required final String statusTag,
+      final double rating,
+      final String? priceRange,
       final bool isSafe}) = _$NearbyPlaceImpl;
 
   factory _NearbyPlace.fromJson(Map<String, dynamic> json) =
@@ -247,9 +322,17 @@ abstract class _NearbyPlace implements NearbyPlace {
   @override
   String get category;
   @override
-  double get distance;
+  String get distanceInfo;
   @override
   String get address;
+  @override
+  String get subInfo;
+  @override
+  String get statusTag;
+  @override
+  double get rating;
+  @override
+  String? get priceRange;
   @override
   bool get isSafe;
   @override

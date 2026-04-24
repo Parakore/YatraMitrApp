@@ -18,24 +18,84 @@ class NearbyService {
     // final response = await _dioClient.get('/nearby');
     // return (response.data as List).map((e) => NearbyPlace.fromJson(e)).toList();
 
-    // Mock data for demonstration
+    // Mock data based on user requirements
     await Future.delayed(const Duration(seconds: 1));
     return [
       const NearbyPlace(
         id: '1',
-        name: 'Safe Rest Area',
-        category: 'Rest',
-        distance: 0.5,
-        address: '123 Pilgrim Way',
-        isSafe: true,
+        name: 'Govt Toilet Complex',
+        category: 'Toilets',
+        distanceInfo: '150m',
+        address: 'Gaurikund Main',
+        subInfo: 'Open 24×7',
+        statusTag: 'Cleanliness: Good',
+        rating: 4.0,
       ),
       const NearbyPlace(
         id: '2',
-        name: 'Local Clinic',
+        name: 'SBI ATM',
+        category: 'ATM',
+        distanceInfo: '200m',
+        address: 'Near Bus Stand',
+        subInfo: '₹10,000 limit',
+        statusTag: 'Cash Available',
+      ),
+      const NearbyPlace(
+        id: '3',
+        name: 'Aahar Kendra (Govt)',
+        category: 'Food',
+        distanceInfo: '300m',
+        address: 'Gaurikund Market',
+        subInfo: 'Hygiene: Certified',
+        statusTag: '₹30–80/meal',
+        priceRange: '₹30–80',
+      ),
+      const NearbyPlace(
+        id: '4',
+        name: 'Medical Camp',
         category: 'Medical',
-        distance: 1.2,
-        address: '456 Health St',
+        distanceInfo: '350m',
+        address: 'SDRF Base',
+        subInfo: '24×7 Emergency',
+        statusTag: 'O₂ Available',
         isSafe: true,
+      ),
+      const NearbyPlace(
+        id: '5',
+        name: 'Tourist Rest Bhavan',
+        category: 'Rest Area',
+        distanceInfo: '500m',
+        address: 'GMVN Property',
+        subInfo: '₹400/night',
+        statusTag: 'Available',
+        priceRange: '₹400',
+      ),
+      const NearbyPlace(
+        id: '6',
+        name: 'Tourist Police Post',
+        category: 'Police',
+        distanceInfo: '600m',
+        address: 'Near Gaurikund Gate',
+        subInfo: '24×7',
+        statusTag: 'Staffed',
+      ),
+      const NearbyPlace(
+        id: '7',
+        name: 'Drinking Water Point',
+        category: 'Water',
+        distanceInfo: '700m',
+        address: 'Purified Mountain Water',
+        subInfo: 'Free',
+        statusTag: 'Tested Safe',
+      ),
+      const NearbyPlace(
+        id: '8',
+        name: 'Saraswati Pharmacy',
+        category: 'Medical', // Or 'Pharmacy' if we add it
+        distanceInfo: '850m',
+        address: 'Gaurikund Market',
+        subInfo: '06:00–21:00',
+        statusTag: 'Diamox Available',
       ),
     ];
   }

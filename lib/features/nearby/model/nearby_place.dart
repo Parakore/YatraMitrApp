@@ -10,8 +10,12 @@ class NearbyPlace with _$NearbyPlace {
     required String id,
     required String name,
     required String category,
-    required double distance,
+    required String distanceInfo,
     required String address,
+    required String subInfo,
+    required String statusTag,
+    @Default(0.0) double rating,
+    String? priceRange,
     @Default(false) bool isSafe,
   }) = _NearbyPlace;
 
