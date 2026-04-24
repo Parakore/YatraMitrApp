@@ -15,6 +15,13 @@ lib/
         ├── repository/ # Data abstraction layer
         ├── viewmodel/  # Business logic (Riverpod)
         └── view/       # UI components
+
+## 🧠 Smart Intelligence Modules
+
+1. **Crowd & Traffic**: Real-time density monitoring and wait-time prediction using heuristic models.
+2. **Disaster System**: Multi-hazard alert system (Weather/Landslide) with location-based risk mapping.
+3. **Emergency SOS**: Accessibility-first SOS trigger with rescue workflow tracking and incident history.
+4. **AI Assistant**: Conversational safety companion with offline-first FAQ knowledge base.
 ```
 
 ## 🔄 Data Flow

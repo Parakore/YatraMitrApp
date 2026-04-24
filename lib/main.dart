@@ -4,8 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/storage/hive_service.dart';
 import 'core/storage/shared_pref_service.dart';
 import 'core/theme/app_theme.dart';
-import 'features/home/view/home_screen.dart';
-// import 'features/nearby/view/nearby_screen.dart'; // Removed as unused in main.dart
+import 'core/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +30,11 @@ class YatraMitraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'YatraMitra',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      routerConfig: AppRouter.router,
     );
   }
 }

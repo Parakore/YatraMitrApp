@@ -6,7 +6,7 @@ part of 'nearby_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nearbyViewModelHash() => r'2b091fd8815afb35d140fbbbbb599060e58130c7';
+String _$nearbyViewModelHash() => r'6c6ad0f67d17a6b73d58e1a09536571b46c42273';
 
 /// ViewModel for handling Nearby Services logic.
 /// Responsible for fetching and providing nearby data state.

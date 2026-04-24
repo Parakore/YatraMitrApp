@@ -20,6 +20,13 @@ class AppColors {
   static const Color success = Color(0xFF2E7D32);
   static const Color warning = Color(0xFFF9A825);
 
+  // Web Proto Colors
+  static const Color saffron = Color(0xFFFF6B00);
+  static const Color gold = Color(0xFFD4A017);
+  static const Color blueDark = Color(0xFF0D1B2A);
+  static const Color purple = Color(0xFF6F42C1);
+  static const Color teal = Color(0xFF17A2B8);
+
   // Private constructor to prevent instantiation
   AppColors._();
 }
