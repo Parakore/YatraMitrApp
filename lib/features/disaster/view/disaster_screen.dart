@@ -45,16 +45,12 @@ class DisasterScreen extends ConsumerWidget {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Container(
-        color: AppColors.primary.withAlpha(30),
-        child: summaryState.when(
-          data: (summary) => _buildContent(context, ref, summary),
-          loading: () =>
-              const LoadingWidget(message: 'Analyzing safety data...'),
-          error: (error, stack) => AppErrorWidget(
-            errorMessage: error.toString(),
-            onRetry: () => ref.refresh(disasterIntelligenceViewModelProvider),
-          ),
+      body: summaryState.when(
+        data: (summary) => _buildContent(context, ref, summary),
+        loading: () => const LoadingWidget(message: 'Analyzing safety data...'),
+        error: (error, stack) => AppErrorWidget(
+          errorMessage: error.toString(),
+          onRetry: () => ref.refresh(disasterIntelligenceViewModelProvider),
         ),
       ),
     );

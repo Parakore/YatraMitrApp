@@ -9,6 +9,8 @@ import '../../features/crowd/view/crowd_intelligence_screen.dart';
 // import '../../features/disaster/view/disaster_screen.dart';
 import '../../shared/widgets/error_widget.dart';
 
+import '../../features/weather/view/weather_screen.dart';
+
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
 class AppRouter {
@@ -20,6 +22,7 @@ class AppRouter {
   static const String yatraGuide = '/yatra-guide';
   static const String crowdIntelligence = '/crowd';
   static const String disasterAlerts = '/disaster';
+  static const String weather = '/weather';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -64,6 +67,10 @@ class AppRouter {
       GoRoute(
         path: disasterAlerts,
         builder: (context, state) => const DisasterScreen(),
+      ),
+      GoRoute(
+        path: weather,
+        builder: (context, state) => const WeatherScreen(),
       ),
     ],
   );

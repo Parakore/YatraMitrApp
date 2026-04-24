@@ -5,6 +5,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/status_pill.dart';
+import '../../weather/viewmodel/weather_viewmodel.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -14,13 +15,15 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final responsive = Responsive(context);
 
+    final weatherState = ref.watch(weatherViewModelProvider);
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
         decoration: BoxDecoration(color: AppColors.primary.withAlpha(30)),
         child: Column(
           children: [
-            _buildHeroBanner(context, responsive),
+            _buildHeroBanner(context, responsive, weatherState),
             const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -67,7 +70,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeroBanner(BuildContext context, Responsive responsive) {
+  Widget _buildHeroBanner(BuildContext context, Responsive responsive, AsyncValue weatherState) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
@@ -147,17 +150,31 @@ class HomeScreen extends ConsumerWidget {
                   color: Colors.white.withAlpha(30),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.wb_sunny_rounded,
+                    const Icon(Icons.wb_sunny_rounded,
                         color: Colors.orangeAccent, size: 14),
-                    SizedBox(width: 4),
-                    Text(
-                      '12°C Gaurikund',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold),
+                    const SizedBox(width: 4),
+                    weatherState.when(
+                      data: (data) => Text(
+                        '${data.current.temperature.toStringAsFixed(1)}°C ${data.current.location}',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      loading: () => const SizedBox(
+                        width: 10,
+                        height: 10,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      ),
+                      error: (_, __) => const Text(
+                        '--°C',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -208,7 +225,7 @@ class HomeScreen extends ConsumerWidget {
         title: 'Weather',
         icon: Icons.thunderstorm_rounded,
         color: AppColors.saffron,
-        route: AppRouter.disasterAlerts
+        route: AppRouter.weather
       ),
       (
         title: 'E-Pass',

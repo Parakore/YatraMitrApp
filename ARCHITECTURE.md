@@ -22,6 +22,7 @@ lib/
 2. **Disaster System**: Multi-hazard alert system (Weather/Landslide) with location-based risk mapping.
 3. **Emergency SOS**: Accessibility-first SOS trigger with rescue workflow tracking and incident history.
 4. **AI Assistant**: Conversational safety companion with offline-first FAQ knowledge base.
+5. **Weather & Forecast**: Real-time OpenWeather integration with AI-powered safety recommendations.
 ```
 
 ## 🔄 Data Flow
