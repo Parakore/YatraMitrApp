@@ -30,58 +30,88 @@ class WeatherRepository {
       return intelligence;
     } catch (e) {
       // 4. On error (e.g. offline), try to return cached data
-      final cachedJson = await _hiveService.getData<String>(_weatherBox, _weatherKey);
-      if (cachedJson != null) {
-        return WeatherIntelligence.fromJson(jsonDecode(cachedJson));
+      try {
+        final cachedJson = await _hiveService.getData<String>(_weatherBox, _weatherKey);
+        if (cachedJson != null) {
+          return WeatherIntelligence.fromJson(jsonDecode(cachedJson));
+        }
+      } catch (cacheError) {
+        // If cache is corrupted, clear it and rethrow original error
+        await _hiveService.putData(_weatherBox, _weatherKey, null);
       }
       rethrow;
     }
   }
 
   WeatherIntelligence _parseIntelligence(Map<String, dynamic> current, Map<String, dynamic> forecast) {
+    // Safely parse current weather
+    final main = current['main'] as Map<String, dynamic>?;
+    final weatherList = current['weather'] as List<dynamic>?;
+    final weather = (weatherList != null && weatherList.isNotEmpty) ? weatherList[0] : null;
+    final wind = current['wind'] as Map<String, dynamic>?;
+    
+    // Visibility is optional in OWM API
+    final visibilityVal = current['visibility'] as num?;
+    final visibilityStr = visibilityVal != null 
+        ? '${(visibilityVal / 1000).toStringAsFixed(1)} km' 
+        : 'Clear';
+
+    // Handle both rain and snow
+    final rain = current['rain'] as Map<String, dynamic>?;
+    final snow = current['snow'] as Map<String, dynamic>?;
+    final precipitation = (rain?['1h'] as num? ?? snow?['1h'] as num?)?.toDouble() ?? 0.0;
+
     final currentWeather = WeatherModel(
-      temperature: (current['main']['temp'] as num).toDouble(),
-      condition: current['weather'][0]['main'],
-      description: current['weather'][0]['description'],
-      rainfall: (current['rain']?['1h'] as num?)?.toDouble() ?? 0.0,
-      windSpeed: (current['wind']['speed'] as num).toDouble(),
-      humidity: (current['main']['humidity'] as num).toInt(),
-      visibility: '${((current['visibility'] as num) / 1000).toStringAsFixed(1)} km',
+      temperature: (main?['temp'] as num? ?? 0.0).toDouble(),
+      condition: weather?['main'] ?? 'Unknown',
+      description: weather?['description'] ?? 'No description available',
+      rainfall: precipitation,
+      windSpeed: (wind?['speed'] as num? ?? 0.0).toDouble(),
+      humidity: (main?['humidity'] as num? ?? 0).toInt(),
+      visibility: visibilityStr,
       timestamp: DateTime.now(),
-      location: current['name'] ?? 'Unknown',
+      location: current['name'] ?? 'Unknown Location',
     );
 
-    final List<dynamic> forecastList = forecast['list'];
+    final List<dynamic> forecastList = forecast['list'] ?? [];
     final forecasts = forecastList.take(5).map((f) {
+      final fMain = f['main'] as Map<String, dynamic>?;
+      final fWeatherList = f['weather'] as List<dynamic>?;
+      final fWeather = (fWeatherList != null && fWeatherList.isNotEmpty) ? fWeatherList[0] : null;
+      final fRain = f['rain'] as Map<String, dynamic>?;
+      final fSnow = f['snow'] as Map<String, dynamic>?;
+      
       return ForecastModel(
-        date: DateTime.fromMillisecondsSinceEpoch(f['dt'] * 1000),
-        temperature: (f['main']['temp'] as num).toDouble(),
-        condition: f['weather'][0]['main'],
-        rainfall: (f['rain']?['3h'] as num?)?.toDouble() ?? 0.0,
+        date: DateTime.fromMillisecondsSinceEpoch((f['dt'] as int? ?? 0) * 1000),
+        temperature: (fMain?['temp'] as num? ?? 0.0).toDouble(),
+        condition: fWeather?['main'] ?? 'Unknown',
+        rainfall: (fRain?['3h'] as num? ?? fSnow?['3h'] as num?)?.toDouble() ?? 0.0,
       );
     }).toList();
 
     // AI Intelligence Logic
     String riskLevel = 'Low';
-    String recommendation = 'Safe to proceed';
+    String recommendation = 'Safe to proceed with caution';
     List<String> tips = ['Start early to reach the next base camp by afternoon'];
 
-    if (currentWeather.rainfall > 20) {
-      riskLevel = 'High';
-      recommendation = 'Avoid travel - Heavy rain reported';
-      tips.add('Seek shelter immediately and stay updated with local reports');
-    } else if (currentWeather.rainfall > 5 || currentWeather.condition.toLowerCase().contains('storm')) {
+    if (currentWeather.rainfall > 10 || currentWeather.condition.toLowerCase().contains('snow')) {
       riskLevel = 'Medium';
-      recommendation = 'Proceed with caution';
-      tips.add('Carry a heavy-duty raincoat and waterproof gear');
+      recommendation = 'Proceed with extra caution - Precipitation reported';
+      tips.add('Ensure you have waterproof gear and stable footwear');
+    }
+    
+    if (currentWeather.rainfall > 25 || currentWeather.condition.toLowerCase().contains('storm')) {
+      riskLevel = 'High';
+      recommendation = 'Avoid travel - Severe weather reported';
+      tips.add('Seek shelter immediately and wait for weather clearance');
     }
 
     if (currentWeather.temperature < 5) {
-      tips.add('Extreme cold - Wear layered woolen clothing');
+      tips.add('Extreme cold - Wear layered thermal clothing');
     }
 
-    if (currentWeather.windSpeed > 15) {
-      tips.add('High winds - Avoid walking near open ridges');
+    if (currentWeather.windSpeed > 20) {
+      tips.add('High winds - Stay away from loose structures and ridges');
     }
 
     return WeatherIntelligence(
