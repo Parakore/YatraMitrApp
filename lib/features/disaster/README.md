@@ -5,29 +5,33 @@ The Disaster Intelligence System is a critical safety feature designed to provid
 
 ## Architecture
 - **Model**: Immutable data structures using `freezed`.
-- **Service**: `DisasterService` handles data fetching (mock for now) and local caching using `Hive`.
-- **Repository**: `DisasterRepository` abstracts the data source.
-- **ViewModel**: `DisasterIntelligenceViewModel` (Riverpod `AsyncNotifier`) manages the state.
-- **View**: Responsive UI with specialized widgets for different data types.
+- **Service**: `DisasterService` integrates with `WeatherService` to fetch real-time OpenWeather data for Char Dham locations (Kedarnath coordinates used as base).
+- **Caching**: Local caching implemented via `Hive` (box: `disaster_intelligence`) with an offline-first approach.
+- **Repository**: `DisasterRepository` provides a clean interface for the ViewModel.
+- **ViewModel**: `DisasterIntelligenceViewModel` (Riverpod `AsyncNotifier`) handles polling/refreshing state.
+- **View**: Premium, high-contrast UI designed for pilgrims and elderly users.
 
-## Key Features
-- **Route Overview**: Real-time status of major Char Dham routes (Kedarnath, Badrinath, etc.).
-- **AI Recommendation**: Short, actionable safety tips generated based on current conditions.
-- **Active Alerts**: Priority warnings about landslides, heavy rain, or floods.
-- **5-Day Forecast**: Intelligent weather outlook with "Trek Status" indicators.
-- **Landslide Risk Zones**: Mapping of specific high-risk areas.
-- **Route Closures**: Detailed tracking of path closures and estimated reopen times.
+## Technical Details: Weather Integration
+The system fetches weather data from OpenWeather for specific coordinates:
+- **Base Coordinate**: Kedarnath (30.7346° N, 79.0669° E)
+- **Forecast Logic**: Retrieves 5-day forecast data at 24-hour intervals to provide daily safety assessments.
+- **Trek Status Mapping**: Automatically calculates trek safety (Proceed/Caution/Avoid) based on temperature, rainfall, and weather conditions.
+
+## UI Design System
+- **Contrast**: High-contrast text and icons for outdoor/low-light usability.
+- **Gradients**: Premium dark-blue to saffron gradients for brand consistency.
+- **Glassmorphism**: Subtle glassmorphism effects for route overview cards.
+- **Status Pills**: Standardized color-coding (Success: Open, Warning: Caution, Error: Closed).
 
 ## Offline Behavior
-- All data is cached locally using Hive.
-- On launch, cached data is displayed immediately.
-- A "Last Updated" timestamp is shown to inform the user about data freshness.
-- Graceful degradation in case of network failure.
+- Displays cached data immediately upon entry.
+- Uses `RefreshIndicator` for manual updates.
+- Gracefully fallbacks to cache on API failures or network timeouts.
 
 ## Dependencies
 - `flutter_riverpod`
-- `riverpod_annotation`
+- `dio` (via `WeatherService`)
 - `hive`
 - `freezed`
-- `shimmer` (for loading states)
-- `go_router`
+- `shimmer`
+- `flutter_dotenv` (for API keys)

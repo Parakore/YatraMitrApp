@@ -45,13 +45,59 @@ class DisasterScreen extends ConsumerWidget {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: summaryState.when(
-        data: (summary) => _buildContent(context, ref, summary),
-        loading: () => const LoadingWidget(message: 'Analyzing safety data...'),
-        error: (error, stack) => AppErrorWidget(
-          errorMessage: error.toString(),
-          onRetry: () => ref.refresh(disasterIntelligenceViewModelProvider),
+      body: RefreshIndicator(
+        onRefresh: () =>
+            ref.read(disasterIntelligenceViewModelProvider.notifier).refresh(),
+        color: AppColors.saffron,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.primary.withAlpha(40),
+                AppColors.primary.withAlpha(10),
+              ],
+            ),
+          ),
+          child: summaryState.when(
+            data: (summary) => _buildContent(context, ref, summary),
+            loading: () =>
+                const LoadingWidget(message: 'Analyzing safety data...'),
+            error: (error, stack) => AppErrorWidget(
+              errorMessage: error.toString(),
+              onRetry: () => ref.read(disasterIntelligenceViewModelProvider.notifier).refresh(),
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: AppColors.saffron,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.5,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -59,6 +105,7 @@ class DisasterScreen extends ConsumerWidget {
   Widget _buildContent(BuildContext context, WidgetRef ref,
       DisasterIntelligenceSummary summary) {
     return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,57 +113,27 @@ class DisasterScreen extends ConsumerWidget {
           // 1. Weather Summary & Route Overview
           WeatherSummaryCard(summary: summary),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'AI Safety Recommendation',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+          _buildSectionHeader('AI Safety Recommendation'),
 
           // 2. AI Recommendation Block
           AiRecommendationBlock(recommendations: summary.aiRecommendations),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Active Safety Alerts',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+          _buildSectionHeader('Active Safety Alerts'),
 
           // 3. Active Alerts
           _buildAlertsList(summary.activeAlerts),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              '5-Day Safety Forecast',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+          _buildSectionHeader('5-Day Safety Forecast'),
 
           // 4. Forecast Table
           ForecastTable(forecasts: summary.fiveDayForecast),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Landslide Risk Zones',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+          _buildSectionHeader('Landslide Risk Zones'),
 
           // 5. Landslide Risk Zones
           RiskZonesGrid(zones: summary.landslideZones),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Route Status & Closures',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+          _buildSectionHeader('Route Status & Closures'),
 
           // 6. Route Closures
           RouteClosuresList(closures: summary.routeClosures),
@@ -125,13 +142,29 @@ class DisasterScreen extends ConsumerWidget {
 
           // Last Updated Info
           Center(
-            child: Text(
-              'Last Updated: ${summary.lastUpdated.toString().split('.')[0]}',
-              style:
-                  const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+            child: Column(
+              children: [
+                const Icon(Icons.update, size: 16, color: AppColors.textSecondary),
+                const SizedBox(height: 4),
+                Text(
+                  'Last Updated: ${summary.lastUpdated.hour}:${summary.lastUpdated.minute.toString().padLeft(2, '0')} ${summary.lastUpdated.hour >= 12 ? 'PM' : 'AM'}',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  'Safety data refreshed automatically',
+                  style: TextStyle(
+                    color: AppColors.textSecondary.withAlpha(150),
+                    fontSize: 10,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
         ],
       ),
     );
@@ -162,44 +195,89 @@ class _AlertCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      elevation: 2,
+      shadowColor: color.withAlpha(30),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: color.withAlpha(76), width: 1),
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: color.withAlpha(40), width: 1.5),
       ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withAlpha(25),
-            shape: BoxShape.circle,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          leading: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withAlpha(20),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.warning_amber_rounded, color: color, size: 24),
           ),
-          child: Icon(Icons.warning_amber_rounded, color: color),
-        ),
-        title: Text(
-          '${alert.type} Alert — ${alert.location}',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 4),
-            Text(alert.action,
-                style: const TextStyle(color: AppColors.textPrimary)),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Severity: ${alert.severity}',
-                  style: TextStyle(
-                      color: color, fontWeight: FontWeight.bold, fontSize: 12),
+          title: Text(
+            '${alert.type} Alert',
+            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+          ),
+          subtitle: Text(
+            alert.location,
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                Text(
-                  '${DateTime.now().difference(alert.timestamp).inMinutes}m ago',
+                child: Text(
+                  alert.severity.toUpperCase(),
                   style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 12),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                  ),
                 ),
-              ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${DateTime.now().difference(alert.timestamp).inMinutes}m ago',
+                style: const TextStyle(
+                    color: AppColors.textSecondary, fontSize: 10),
+              ),
+            ],
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'RECOMMENDED ACTION',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    alert.action,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

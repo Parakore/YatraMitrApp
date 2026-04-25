@@ -10,22 +10,25 @@ class WeatherSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.secondary,
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [AppColors.secondary, AppColors.blueDark],
+        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF1A3A6B),
+            const Color(0xFF0D1B2A).withAlpha(230),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary.withAlpha(76),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: const Color(0xFF0D1B2A).withAlpha(100),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
+        border: Border.all(color: Colors.white.withAlpha(20), width: 1.5),
       ),
       child: Column(
         children: [
@@ -36,52 +39,105 @@ class WeatherSummaryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${summary.weatherSummary.temperature}°C',
+                    '${summary.weatherSummary.temperature.toStringAsFixed(1)}°C',
                     style: const TextStyle(
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 48,
+                      fontWeight: FontWeight.w900,
                       color: Colors.white,
+                      letterSpacing: -1,
                     ),
                   ),
-                  Text(
-                    summary.weatherSummary.condition,
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, size: 14, color: AppColors.saffron.withAlpha(200)),
+                      const SizedBox(width: 4),
+                      const Text(
+                        'Kedarnath Base',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              const Icon(Icons.cloudy_snowing, size: 60, color: Colors.white),
+              _buildWeatherIcon(summary.weatherSummary.condition),
             ],
           ),
-          const SizedBox(height: 20),
-          const Divider(color: Colors.white24),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStatItem('Rainfall', '${summary.weatherSummary.rainfall}mm', Icons.water_drop),
-              _buildStatItem('Visibility', summary.weatherSummary.visibility, Icons.visibility),
-              _buildStatItem('Alerts', summary.activeAlerts.length.toString(), Icons.notification_important),
-            ],
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(15),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem('Rainfall', '${summary.weatherSummary.rainfall}mm', Icons.water_drop),
+                _buildStatItem('Visibility', summary.weatherSummary.visibility, Icons.visibility),
+                _buildStatItem('Safety', summary.activeAlerts.length > 1 ? 'Alert' : 'Stable', Icons.shield),
+              ],
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           _buildRouteOverview(),
         ],
       ),
     );
   }
 
+  Widget _buildWeatherIcon(String condition) {
+    IconData icon;
+    Color color = Colors.white;
+    
+    switch (condition.toLowerCase()) {
+      case 'rain':
+        icon = Icons.umbrella_rounded;
+        break;
+      case 'clouds':
+        icon = Icons.cloud_rounded;
+        break;
+      case 'clear':
+        icon = Icons.wb_sunny_rounded;
+        color = AppColors.gold;
+        break;
+      default:
+        icon = Icons.cloud_queue_rounded;
+    }
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(20),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icon, size: 48, color: color),
+    );
+  }
+
   Widget _buildStatItem(String label, String value, IconData icon) {
     return Column(
       children: [
-        Icon(icon, color: Colors.white, size: 24),
+        Icon(icon, color: AppColors.saffron, size: 20),
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 16,
+          ),
         ),
         Text(
           label,
-          style: const TextStyle(color: Colors.white60, fontSize: 12),
+          style: TextStyle(
+            color: Colors.white.withAlpha(150),
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -89,24 +145,30 @@ class WeatherSummaryCard extends StatelessWidget {
 
   Widget _buildRouteOverview() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(25),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withAlpha(10),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withAlpha(15)),
       ),
       child: Column(
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.map, color: Colors.white, size: 16),
-              SizedBox(width: 8),
+              const Icon(Icons.alt_route_rounded, color: AppColors.saffron, size: 18),
+              const SizedBox(width: 8),
               Text(
-                'Char Dham Route Status',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                'Char Dham Accessibility',
+                style: TextStyle(
+                  color: Colors.white.withAlpha(230),
+                  fontWeight: FontWeight.w900,
+                  fontSize: 14,
+                  letterSpacing: 0.2,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: summary.routeStatuses.map((rs) => _buildRoutePill(rs)).toList(),
@@ -136,18 +198,27 @@ class WeatherSummaryCard extends StatelessWidget {
       children: [
         Text(
           rs.name,
-          style: const TextStyle(color: Colors.white70, fontSize: 10),
+          style: TextStyle(
+            color: Colors.white.withAlpha(180),
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: statusColor,
-            borderRadius: BorderRadius.circular(6),
+            color: statusColor.withAlpha(40),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: statusColor.withAlpha(80)),
           ),
           child: Text(
             rs.status,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+            style: TextStyle(
+              color: statusColor,
+              fontWeight: FontWeight.w900,
+              fontSize: 10,
+            ),
           ),
         ),
       ],
