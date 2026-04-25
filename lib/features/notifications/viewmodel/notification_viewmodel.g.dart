@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_viewmodel.dart';
+part of 'notification_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeViewModelHash() => r'1df656567c348a5e4e24a90ac833f157fd320280';
+String _$notificationViewModelHash() =>
+    r'551ab775497965fff07516f37926e8da7506d69d';
 
-/// ViewModel for the Home Screen.
-///
-/// Copied from [HomeViewModel].
-@ProviderFor(HomeViewModel)
-final homeViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<HomeViewModel, HomeState>.internal(
-  HomeViewModel.new,
-  name: r'homeViewModelProvider',
+/// See also [NotificationViewModel].
+@ProviderFor(NotificationViewModel)
+final notificationViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    NotificationViewModel, NotificationState>.internal(
+  NotificationViewModel.new,
+  name: r'notificationViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$homeViewModelHash,
+      : _$notificationViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeViewModel = AutoDisposeAsyncNotifier<HomeState>;
+typedef _$NotificationViewModel = AutoDisposeAsyncNotifier<NotificationState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

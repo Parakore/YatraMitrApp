@@ -4,14 +4,28 @@ import 'package:flutter/material.dart';
 class DhamInfo {
   final String name;
   final String description;
+  final String location;
   final String imageUrl;
+  final double temperature;
+  final String crowdStatus;
+  final String altitude;
+  final String? alertMessage;
+  final bool isOpen;
 
   const DhamInfo({
     required this.name,
     required this.description,
+    required this.location,
     required this.imageUrl,
+    required this.temperature,
+    required this.crowdStatus,
+    required this.altitude,
+    this.alertMessage,
+    this.isOpen = true,
   });
 }
+
+
 
 /// Model representing a Quick Action on the home screen.
 class QuickAction {

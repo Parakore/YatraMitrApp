@@ -31,7 +31,9 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       _buildHeroCarousel(context, state, ref),
                       const SizedBox(height: 24),
-                      _buildSectionHeader('The Four Dhams', onSeeAll: () {}),
+                      _buildSectionHeader('The Four Dhams',
+                          onSeeAll: () =>
+                              context.push(AppRouter.dhamListing)),
                       _buildDhamGrid(context, state.dhams),
                       const SizedBox(height: 24),
                       _buildSectionHeader('Quick Actions', onSeeAll: () {}),
@@ -73,14 +75,17 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           const Spacer(),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              shape: BoxShape.circle,
+          InkWell(
+            onTap: () => context.push(AppRouter.notifications),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.notifications_none_rounded,
+                  color: AppColors.textPrimary),
             ),
-            child: const Icon(Icons.notifications_none_rounded,
-                color: AppColors.textPrimary),
           ),
         ],
       ),

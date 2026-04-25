@@ -55,25 +55,46 @@ class HomeViewModel extends _$HomeViewModel {
       dhams: const [
         DhamInfo(
           name: 'Yamunotri Dham',
+          location: 'Uttarkashi',
           description: 'First stop of the Yatra, dedicated to Goddess Yamuna.',
           imageUrl: 'assets/images/dhams/yamunotri.png',
+          temperature: 8.5,
+          crowdStatus: 'Medium',
+          altitude: '3,293 m',
+          isOpen: true,
         ),
         DhamInfo(
           name: 'Gangotri Dham',
+          location: 'Uttarkashi',
           description: 'The spiritual origin of the holy River Ganga.',
           imageUrl: 'assets/images/dhams/gangotri.png',
+          temperature: 10.0,
+          crowdStatus: 'Low',
+          altitude: '3,100 m',
+          isOpen: true,
         ),
         DhamInfo(
           name: 'Kedarnath Dham',
+          location: 'Rudraprayag',
           description:
               'The sacred dham of Lord Shiva, nestled at 3,583 meters.',
           imageUrl: 'assets/images/dhams/kedarnath.png',
+          temperature: 5.0,
+          crowdStatus: 'High',
+          altitude: '3,583 m',
+          alertMessage: 'Rain Alert: Light rain expected',
+          isOpen: true,
         ),
         DhamInfo(
           name: 'Badrinath Dham',
+          location: 'Chamoli',
           description:
               'Dedicated to Lord Vishnu, the preserver of the universe.',
           imageUrl: 'assets/images/dhams/badrinath.png',
+          temperature: 12.0,
+          crowdStatus: 'Medium',
+          altitude: '3,133 m',
+          isOpen: true,
         ),
       ],
       quickActions: [

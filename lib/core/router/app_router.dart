@@ -6,7 +6,8 @@ import '../../features/emergency/view/emergency_screen.dart';
 import '../../features/home/view/home_screen.dart';
 import '../../features/nearby/view/nearby_screen.dart';
 import '../../features/crowd/view/crowd_intelligence_screen.dart';
-// import '../../features/disaster/view/disaster_screen.dart';
+import '../../features/home/view/dham_listing_screen.dart';
+import '../../features/notifications/view/notification_screen.dart';
 import '../../shared/widgets/error_widget.dart';
 
 import '../../features/weather/view/weather_screen.dart';
@@ -23,6 +24,8 @@ class AppRouter {
   static const String crowdIntelligence = '/crowd';
   static const String disasterAlerts = '/disaster';
   static const String weather = '/weather';
+  static const String dhamListing = '/dham-listing';
+  static const String notifications = '/notifications';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -71,6 +74,14 @@ class AppRouter {
       GoRoute(
         path: weather,
         builder: (context, state) => const WeatherScreen(),
+      ),
+      GoRoute(
+        path: dhamListing,
+        builder: (context, state) => const DhamListingScreen(),
+      ),
+      GoRoute(
+        path: notifications,
+        builder: (context, state) => const NotificationScreen(),
       ),
     ],
   );
