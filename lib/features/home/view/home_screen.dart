@@ -36,14 +36,18 @@ class HomeScreen extends ConsumerWidget {
                               context.push(AppRouter.dhamListing)),
                       _buildDhamGrid(context, state.dhams),
                       const SizedBox(height: 24),
-                      _buildSectionHeader('Quick Actions', onSeeAll: () {}),
+                      _buildSectionHeader('Quick Actions',
+                          onSeeAll: () =>
+                              context.push(AppRouter.quickActions)),
                       _buildQuickActions(context, state.quickActions),
                       const SizedBox(height: 24),
                       if (state.weatherAlert != null) ...[
                         _buildWeatherAlert(context, state.weatherAlert!),
                         const SizedBox(height: 24),
                       ],
-                      _buildSectionHeader('Travel Essentials', onSeeAll: () {}),
+                      _buildSectionHeader('Travel Essentials',
+                          onSeeAll: () =>
+                              context.push(AppRouter.travelEssentials)),
                       _buildTravelEssentials(context, state.travelEssentials),
                     ],
                   ),
@@ -214,14 +218,20 @@ class HomeScreen extends ConsumerWidget {
       itemCount: dhams.length,
       itemBuilder: (context, index) {
         final dham = dhams[index];
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            image: DecorationImage(
-              image: AssetImage(dham.imageUrl),
-              fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () {
+            context.push(
+              AppRouter.dhamDetail.replaceFirst(':id', dham.name.toLowerCase()),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: AssetImage(dham.imageUrl),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -255,8 +265,9 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
           ),
-        );
-      },
+        ),
+      );
+    },
     );
   }
 
@@ -344,26 +355,29 @@ class HomeScreen extends ConsumerWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return Container(
-            width: 100,
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(item.iconPath, width: 50, height: 50),
-                const SizedBox(height: 12),
-                Text(
-                  item.title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.bold, height: 1.1),
-                ),
-              ],
+          return GestureDetector(
+            onTap: () => context.push(item.route),
+            child: Container(
+              width: 100,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(item.iconPath, width: 50, height: 50),
+                  const SizedBox(height: 12),
+                  Text(
+                    item.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 11, fontWeight: FontWeight.bold, height: 1.1),
+                  ),
+                ],
+              ),
             ),
           );
         },

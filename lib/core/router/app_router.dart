@@ -7,7 +7,10 @@ import '../../features/home/view/home_screen.dart';
 import '../../features/nearby/view/nearby_screen.dart';
 import '../../features/crowd/view/crowd_intelligence_screen.dart';
 import '../../features/home/view/dham_listing_screen.dart';
+import '../../features/home/view/dham_detail_screen.dart';
 import '../../features/notifications/view/notification_screen.dart';
+import '../../features/home/view/quick_actions_screen.dart';
+import '../../features/home/view/travel_essentials_screen.dart';
 import '../../shared/widgets/error_widget.dart';
 
 import '../../features/weather/view/weather_screen.dart';
@@ -25,7 +28,10 @@ class AppRouter {
   static const String disasterAlerts = '/disaster';
   static const String weather = '/weather';
   static const String dhamListing = '/dham-listing';
+  static const String dhamDetail = '/dham-detail/:id';
   static const String notifications = '/notifications';
+  static const String quickActions = '/quick-actions';
+  static const String travelEssentials = '/travel-essentials';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -80,8 +86,23 @@ class AppRouter {
         builder: (context, state) => const DhamListingScreen(),
       ),
       GoRoute(
+        path: dhamDetail,
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? 'kedarnath';
+          return DhamDetailScreen(dhamId: id);
+        },
+      ),
+      GoRoute(
         path: notifications,
         builder: (context, state) => const NotificationScreen(),
+      ),
+      GoRoute(
+        path: quickActions,
+        builder: (context, state) => const QuickActionsScreen(),
+      ),
+      GoRoute(
+        path: travelEssentials,
+        builder: (context, state) => const TravelEssentialsScreen(),
       ),
     ],
   );
