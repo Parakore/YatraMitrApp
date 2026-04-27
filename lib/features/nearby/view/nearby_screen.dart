@@ -33,25 +33,36 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Facilities Locator',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.2,
+          ),
         ),
-        centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF0D1B2A),
-                Color(0xFF1A3A6B),
-              ],
+              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
             ),
           ),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(height: 4, color: AppColors.saffron),
+              ),
+            ],
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -74,29 +85,32 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
                 setState(() => _searchQuery = value.toLowerCase());
               },
             ),
-            
+
             _buildSectionHeader('Service Categories'),
-            
+
             // Modern Category Chips
             CategorySelector(
               selectedCategory: _selectedCategory,
               onCategorySelected: (category) {
                 setState(() => _selectedCategory = category);
-                ref.read(nearbyViewModelProvider.notifier).filterByCategory(category);
+                ref
+                    .read(nearbyViewModelProvider.notifier)
+                    .filterByCategory(category);
               },
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Dynamic Facility List
             Expanded(
               child: nearbyState.when(
                 data: (places) {
                   // Apply Search Filter locally for instant UX
                   final filteredPlaces = places.where((p) {
-                    final matchesSearch = p.name.toLowerCase().contains(_searchQuery) ||
-                        p.category.toLowerCase().contains(_searchQuery) ||
-                        p.address.toLowerCase().contains(_searchQuery);
+                    final matchesSearch =
+                        p.name.toLowerCase().contains(_searchQuery) ||
+                            p.category.toLowerCase().contains(_searchQuery) ||
+                            p.address.toLowerCase().contains(_searchQuery);
                     return matchesSearch;
                   }).toList();
 
@@ -105,7 +119,8 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
                   }
 
                   return RefreshIndicator(
-                    onRefresh: () => ref.read(nearbyViewModelProvider.notifier).refresh(),
+                    onRefresh: () =>
+                        ref.read(nearbyViewModelProvider.notifier).refresh(),
                     child: ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.only(bottom: 100),

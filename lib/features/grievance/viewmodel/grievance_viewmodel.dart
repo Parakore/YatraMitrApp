@@ -33,58 +33,119 @@ class GrievanceViewModel extends StateNotifier<GrievanceState> {
 
   void _loadInitialData() {
     final categories = [
-      GrievanceCategory(
+      const GrievanceCategory(
         name: 'Sanitation',
         icon: Icons.delete_outline_rounded,
         color: Colors.green,
       ),
-      GrievanceCategory(
+      const GrievanceCategory(
         name: 'Medical',
         icon: Icons.medical_services_outlined,
         color: Colors.red,
       ),
-      GrievanceCategory(
+      const GrievanceCategory(
+        name: 'Overcharging',
+        icon: Icons.payments_outlined,
+        color: Colors.amber,
+      ),
+      const GrievanceCategory(
         name: 'Road Block',
         icon: Icons.traffic_outlined,
         color: Colors.orange,
       ),
-      GrievanceCategory(
+      const GrievanceCategory(
         name: 'Water Supply',
         icon: Icons.water_drop_outlined,
         color: Colors.blue,
       ),
-      GrievanceCategory(
+      const GrievanceCategory(
         name: 'Security',
         icon: Icons.security_outlined,
         color: Colors.indigo,
       ),
-      GrievanceCategory(
-        name: 'Others',
-        icon: Icons.more_horiz_rounded,
-        color: Colors.grey,
+    ];
+
+    final dummyGrievances = [
+      Grievance(
+        id: 'GRV-2025-0481',
+        category: 'Sanitation',
+        description: 'Toilet at Rambara rest stop non-functional',
+        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+        status: GrievanceStatus.inProgress,
+        geoTag: 'Rambara (8.5 km)',
+        department: 'SDMC',
+        sla: '6 hrs remaining',
+      ),
+      Grievance(
+        id: 'GRV-2025-0442',
+        category: 'Overcharging',
+        description: 'Horse operator charged ₹800 extra at Gaurikund',
+        timestamp: DateTime.now().subtract(const Duration(days: 1)),
+        status: GrievanceStatus.resolved,
+        geoTag: 'Gaurikund Gate',
+        department: 'Tourist Police',
+        sla: 'Resolved ✓',
       ),
     ];
 
-    state = state.copyWith(categories: categories);
+    state = state.copyWith(
+      categories: categories,
+      grievances: dummyGrievances,
+    );
   }
 
   Future<void> submitGrievance(String category, String description) async {
     state = state.copyWith(isLoading: true);
-    
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 2));
 
+    // Step 1: Submit + Geo Tag (Simulated)
     final newGrievance = Grievance(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: 'GRV-2025-${(1000 + state.grievances.length)}',
       category: category,
       description: description,
       timestamp: DateTime.now(),
+      status: GrievanceStatus.pending,
+      geoTag: 'Current Location (Auto)',
     );
 
     state = state.copyWith(
       grievances: [newGrievance, ...state.grievances],
+    );
+
+    // Step 2: AI Dept. Allocation Simulation
+    await Future.delayed(const Duration(seconds: 2));
+    
+    final updatedGrievance = newGrievance.copyWith(
+      status: GrievanceStatus.allocating,
+      department: _assignDepartment(category),
+    );
+
+    state = state.copyWith(
+      grievances: state.grievances.map((g) => g.id == newGrievance.id ? updatedGrievance : g).toList(),
+    );
+
+    // Step 3: SLA Started
+    await Future.delayed(const Duration(seconds: 1));
+    
+    final slaGrievance = updatedGrievance.copyWith(
+      status: GrievanceStatus.inProgress,
+      sla: '12 hrs remaining',
+    );
+
+    state = state.copyWith(
+      grievances: state.grievances.map((g) => g.id == newGrievance.id ? slaGrievance : g).toList(),
       isLoading: false,
     );
+  }
+
+  String _assignDepartment(String category) {
+    switch (category) {
+      case 'Sanitation': return 'SDMC';
+      case 'Medical': return 'Health Dept';
+      case 'Overcharging': return 'Tourist Police';
+      case 'Road Block': return 'NHAI / BRO';
+      case 'Water Supply': return 'Jal Sansthan';
+      default: return 'District Admin';
+    }
   }
 }
 

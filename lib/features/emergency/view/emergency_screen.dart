@@ -97,21 +97,40 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () => context.pop(),
         ),
         title: const Text(
-          'SOS - Emergency',
+          'EMERGENCY SOS',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.5,
           ),
         ),
-        backgroundColor: AppColors.secondary,
-        centerTitle: true,
-        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
+            ),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(height: 4, color: AppColors.saffron),
+              ),
+            ],
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline, color: Colors.white70),

@@ -28,6 +28,14 @@ YatraMitra is a production-grade Flutter application designed for pilgrims and e
 The project follows a strict **MVVM (Model-View-ViewModel)** architecture with a feature-first structure.
 Detailed info can be found in [ARCHITECTURE.md](file:///d:/Flutter%20Projects/Client's%20Project/YatraMitrApp/ARCHITECTURE.md).
 
+## ✨ Key Features
+- 👥 **Crowd Intelligence**: Real-time density monitoring and predictive wait times for shrines.
+- ⚖️ **Grievance Redressal**: Geo-evidence based complaint system with 5-step SLA tracking.
+- 🆘 **Emergency SOS**: Accessibility-first SOS with rescue workflow management.
+- 🤖 **AI Assistant**: Offline-first conversational companion for pilgrim safety.
+- 🗺️ **Offline Navigation**: Optimized routes with local caching for low-network zones.
+- 🌦️ **Weather Forecast**: Accurate updates with AI safety advisories.
+
 ## 🛠️ Tech Stack
 - **State Management**: [Riverpod](https://riverpod.dev/)
 - **Networking**: [Dio](https://pub.dev/packages/dio)

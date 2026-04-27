@@ -19,6 +19,8 @@ import '../../shared/widgets/future_feature_screen.dart';
 import '../../features/weather/view/weather_screen.dart';
 import '../../features/maps/view/navigation_maps_screen.dart';
 import '../../features/grievance/view/grievance_screen.dart';
+import '../../features/grievance/view/grievance_detail_screen.dart';
+import '../../features/grievance/model/grievance_model.dart';
 import '../../features/registration/view/yatra_registration_screen.dart';
 import '../../features/home/view/essential_detail_screen.dart';
 import '../../features/home/model/home_models.dart';
@@ -44,6 +46,7 @@ class AppRouter {
 
   static const String comingSoon = '/coming-soon';
   static const String grievance = '/grievance';
+  static const String grievanceDetail = '/grievance-detail';
   static const String registration = '/registration';
 
   static final GoRouter router = GoRouter(
@@ -88,6 +91,13 @@ class AppRouter {
       GoRoute(
         path: grievance,
         builder: (context, state) => const GrievanceScreen(),
+      ),
+      GoRoute(
+        path: grievanceDetail,
+        builder: (context, state) {
+          final grievance = state.extra as Grievance;
+          return GrievanceDetailScreen(grievance: grievance);
+        },
       ),
       GoRoute(
         path: offlineMaps,
