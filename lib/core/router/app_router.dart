@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:yatramitra/features/disaster/view/disaster_screen.dart';
 import '../../features/ai_assistant/view/ai_chat_screen.dart';
 import '../../features/emergency/view/emergency_screen.dart';
+import '../../features/emergency/view/incident_history_screen.dart';
 import '../../features/home/view/home_screen.dart';
 import '../../features/nearby/view/nearby_screen.dart';
 import '../../features/crowd/view/crowd_intelligence_screen.dart';
@@ -24,6 +25,7 @@ class AppRouter {
   static const String home = '/';
   static const String nearby = '/nearby';
   static const String emergency = '/emergency';
+  static const String emergencyHistory = '/emergency/history';
   static const String aiAssistant = '/ai-assistant';
   static const String offlineMaps = '/offline-maps';
   static const String yatraGuide = '/yatra-guide';
@@ -59,6 +61,10 @@ class AppRouter {
       GoRoute(
         path: emergency,
         builder: (context, state) => const EmergencyScreen(),
+      ),
+      GoRoute(
+        path: emergencyHistory,
+        builder: (context, state) => const IncidentHistoryScreen(),
       ),
       GoRoute(
         path: aiAssistant,

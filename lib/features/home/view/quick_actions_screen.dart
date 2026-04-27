@@ -37,12 +37,12 @@ class QuickActionsScreen extends ConsumerWidget {
       ),
       body: homeState.when(
         data: (state) => GridView.builder(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: 0.8,
+            childAspectRatio: 0.9,
           ),
           itemCount: state.quickActions.length,
           itemBuilder: (context, index) {

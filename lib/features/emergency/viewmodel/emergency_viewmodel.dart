@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/sos_incident.dart';
+import '../repository/emergency_repository.dart';
 
 /// Provider for Emergency state.
 final emergencyProvider = StateNotifierProvider<EmergencyViewModel, EmergencyState>((ref) {
-  return EmergencyViewModel();
+  final repository = ref.watch(emergencyRepositoryProvider);
+  return EmergencyViewModel(repository)..init();
 });
 
 class EmergencyState {
   final bool isSosActive;
+  final bool isLoading;
   final String? lastLocation;
   final List<Map<String, String>> emergencyContacts;
   final List<SosIncident> recentIncidents;
@@ -15,6 +18,7 @@ class EmergencyState {
 
   EmergencyState({
     required this.isSosActive,
+    this.isLoading = false,
     this.lastLocation,
     required this.emergencyContacts,
     required this.recentIncidents,
@@ -23,6 +27,7 @@ class EmergencyState {
 
   EmergencyState copyWith({
     bool? isSosActive,
+    bool? isLoading,
     String? lastLocation,
     List<Map<String, String>>? emergencyContacts,
     List<SosIncident>? recentIncidents,
@@ -30,6 +35,7 @@ class EmergencyState {
   }) {
     return EmergencyState(
       isSosActive: isSosActive ?? this.isSosActive,
+      isLoading: isLoading ?? this.isLoading,
       lastLocation: lastLocation ?? this.lastLocation,
       emergencyContacts: emergencyContacts ?? this.emergencyContacts,
       recentIncidents: recentIncidents ?? this.recentIncidents,
@@ -39,67 +45,35 @@ class EmergencyState {
 }
 
 class EmergencyViewModel extends StateNotifier<EmergencyState> {
-  EmergencyViewModel()
+  final EmergencyRepository _repository;
+
+  EmergencyViewModel(this._repository)
       : super(EmergencyState(
           isSosActive: false,
-          emergencyContacts: [
-            {'label': 'Ambulance / SDRF', 'number': '112'},
-            {'label': 'Kedarnath Medical Camp', 'number': '+91 135-2713600'},
-            {'label': 'Tourist Police Helpline', 'number': '1364'},
-            {'label': 'Disaster Control Room', 'number': '1070'},
-            {'label': 'Emergency Contact (Sanjay Sharma)', 'number': '+91 99XXXXXXXX'},
-          ],
-          recentIncidents: [
-            const SosIncident(
-              id: 'SOS-2025-0041',
-              pilgrim: 'Meena Devi (F,58)',
-              type: 'Medical',
-              location: 'Rambara (8.5km)',
-              time: '07:22 AM',
-              responseTime: '6 mins',
-              agency: 'SDRF + Medical',
-              status: 'Resolved',
-            ),
-            const SosIncident(
-              id: 'SOS-2025-0040',
-              pilgrim: 'Rajesh Gupta (M,66)',
-              type: 'Altitude Sickness',
-              location: 'Linchauri (11km)',
-              time: '06:48 AM',
-              responseTime: '8 mins',
-              agency: 'Medical Camp',
-              status: 'Resolved',
-            ),
-            const SosIncident(
-              id: 'SOS-2025-0039',
-              pilgrim: 'Priya Singh (F,34)',
-              type: 'Ankle Injury',
-              location: 'Bhimbali (5km)',
-              time: '14:10',
-              responseTime: '11 mins',
-              agency: 'Porter + Medical',
-              status: 'Resolved',
-            ),
-            const SosIncident(
-              id: 'SOS-2025-0038',
-              pilgrim: 'Deepak Verma (M,55)',
-              type: 'Chest Pain',
-              location: 'Gaurikund Base',
-              time: '09:30',
-              responseTime: '4 mins',
-              agency: 'Ambulance + AIIMS',
-              status: 'Resolved',
-            ),
-          ],
-          workflowSteps: [
-            const EmergencyWorkflowStep(title: 'SOS Triggered', icon: '📱', desc: 'Location + Profile auto-shared'),
-            const EmergencyWorkflowStep(title: 'AI Classification', icon: '🤖', desc: 'Medical / Accident / Disaster'),
-            const EmergencyWorkflowStep(title: 'Unit Dispatched', icon: '🚑', desc: 'Ambulance / Police / SDRF'),
-            const EmergencyWorkflowStep(title: 'Live Tracking', icon: '📡', desc: 'Real-time rescue team map'),
-            const EmergencyWorkflowStep(title: 'Treatment / Rescue', icon: '🏥', desc: 'Hospital notified en route'),
-            const EmergencyWorkflowStep(title: 'Case Closure', icon: '✅', desc: 'Report + feedback loop'),
-          ],
+          isLoading: true,
+          emergencyContacts: [],
+          recentIncidents: [],
+          workflowSteps: [],
         ));
+
+  /// Initialize state by fetching data from repository.
+  Future<void> init() async {
+    try {
+      final contacts = await _repository.fetchEmergencyContacts();
+      final incidents = await _repository.fetchRecentIncidents();
+      final steps = await _repository.fetchWorkflowSteps();
+
+      state = state.copyWith(
+        isLoading: false,
+        emergencyContacts: contacts,
+        recentIncidents: incidents,
+        workflowSteps: steps,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false);
+      // Handle error (Rule 8: Use Failure pattern if needed)
+    }
+  }
 
   void triggerSos() {
     state = state.copyWith(
