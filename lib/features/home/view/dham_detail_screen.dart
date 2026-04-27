@@ -320,7 +320,8 @@ class DhamDetailScreen extends ConsumerWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () =>
+            context.push(AppRouter.comingSoon, extra: 'Yatra Registration'),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -813,7 +814,7 @@ class DhamDetailScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () => context.push(AppRouter.aiAssistant),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: const BorderSide(color: AppColors.primary),
@@ -1014,7 +1015,7 @@ class DhamDetailScreen extends ConsumerWidget {
           Expanded(
             flex: 1,
             child: InkWell(
-              onTap: () {},
+              onTap: () => context.push(AppRouter.emergency),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
@@ -1048,7 +1049,7 @@ class DhamDetailScreen extends ConsumerWidget {
           Expanded(
             flex: 3,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.push(AppRouter.comingSoon, extra: 'Yatra Registration'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
