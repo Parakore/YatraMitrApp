@@ -270,37 +270,104 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildQuickActions(BuildContext context, List<QuickAction> actions) {
+    final displayActions = actions.take(4).toList();
+
     return SizedBox(
-      height: 120,
+      height: 125,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemCount: actions.length,
+        itemCount: displayActions.length,
         itemBuilder: (context, index) {
-          final action = actions[index];
+          final action = displayActions[index];
           return Container(
-            width: 85,
+            width: 95,
             margin: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
+            child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                InkWell(
-                  onTap: () => context.push(action.route),
+                GestureDetector(
+                  onTap: () {
+                    if (action.isFuture) {
+                      context.push(AppRouter.comingSoon,
+                          extra: action.title.replaceAll('\n', ' '));
+                    } else {
+                      context.push(action.route);
+                    }
+                  },
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    child: Image.asset(action.iconPath, width: 40, height: 40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: action.color.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset(
+                            action.iconPath,
+                            width: 28,
+                            height: 28,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Text(
+                            action.title,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textPrimary,
+                              height: 1.1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  action.title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.bold, height: 1.1),
-                ),
+                if (action.isFuture)
+                  Positioned(
+                    top: -4,
+                    right: -4,
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.saffron,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'SOON',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 7,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           );

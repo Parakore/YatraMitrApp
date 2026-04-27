@@ -99,22 +99,24 @@ class HomeViewModel extends _$HomeViewModel {
       ],
       quickActions: [
         QuickAction(
-          title: 'Register/\nCheck Status',
+          title: 'Register/\nStatus',
           iconPath: 'assets/images/icons/register_status.png',
-          route: AppRouter.yatraGuide, // Using existing routes as placeholders
+          route: '/coming-soon',
           color: AppColors.primary,
+          isFuture: true,
         ),
         QuickAction(
           title: 'Helicopter\nBooking',
           iconPath: 'assets/images/icons/helicopter_booking.png',
-          route: AppRouter.nearby,
+          route: '/coming-soon',
           color: AppColors.teal,
+          isFuture: true,
         ),
         QuickAction(
-          title: 'Find\nStay',
-          iconPath: 'assets/images/icons/find_stay.png',
-          route: AppRouter.nearby,
-          color: AppColors.gold,
+          title: 'Navigation\n& Maps',
+          iconPath: 'assets/images/icons/route_map.png',
+          route: AppRouter.offlineMaps,
+          color: AppColors.secondary,
         ),
         QuickAction(
           title: 'Emergency\nSOS',
@@ -123,10 +125,36 @@ class HomeViewModel extends _$HomeViewModel {
           color: AppColors.error,
         ),
         QuickAction(
-          title: 'Route\nMap',
-          iconPath: 'assets/images/icons/route_map.png',
-          route: AppRouter.offlineMaps,
-          color: AppColors.secondary,
+          title: 'Disaster\nAlerts',
+          iconPath: 'assets/images/icons/difficulty.png', // Placeholder
+          route: AppRouter.disasterAlerts,
+          color: AppColors.warning,
+        ),
+        QuickAction(
+          title: 'Crowd\nIntel',
+          iconPath: 'assets/images/icons/duration.png', // Placeholder
+          route: '/coming-soon',
+          color: AppColors.purple,
+          isFuture: true,
+        ),
+        QuickAction(
+          title: 'Facility\nLocator',
+          iconPath: 'assets/images/icons/find_stay.png', // Placeholder
+          route: AppRouter.nearby,
+          color: AppColors.success,
+        ),
+        QuickAction(
+          title: 'Grievance\nRedressal',
+          iconPath: 'assets/images/icons/dos_donts.png', // Placeholder
+          route: '/grievance',
+          color: AppColors.blueDark,
+        ),
+        QuickAction(
+          title: 'AI Yatra\nPlanner',
+          iconPath: 'assets/images/icons/yatra_guidelines.png', // Placeholder
+          route: '/coming-soon',
+          color: AppColors.gold,
+          isFuture: true,
         ),
       ],
       travelEssentials: const [

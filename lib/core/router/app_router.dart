@@ -12,8 +12,11 @@ import '../../features/notifications/view/notification_screen.dart';
 import '../../features/home/view/quick_actions_screen.dart';
 import '../../features/home/view/travel_essentials_screen.dart';
 import '../../shared/widgets/error_widget.dart';
+import '../../shared/widgets/future_feature_screen.dart';
 
 import '../../features/weather/view/weather_screen.dart';
+import '../../features/maps/view/navigation_maps_screen.dart';
+import '../../features/grievance/view/grievance_screen.dart';
 
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
@@ -32,6 +35,9 @@ class AppRouter {
   static const String notifications = '/notifications';
   static const String quickActions = '/quick-actions';
   static const String travelEssentials = '/travel-essentials';
+
+  static const String comingSoon = '/coming-soon';
+  static const String grievance = '/grievance';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -58,11 +64,20 @@ class AppRouter {
         path: aiAssistant,
         builder: (context, state) => const AiChatScreen(),
       ),
-      // Placeholder routes for now
+      GoRoute(
+        path: comingSoon,
+        builder: (context, state) {
+          final name = state.extra as String? ?? 'New Feature';
+          return FutureFeatureScreen(featureName: name);
+        },
+      ),
+      GoRoute(
+        path: grievance,
+        builder: (context, state) => const GrievanceScreen(),
+      ),
       GoRoute(
         path: offlineMaps,
-        builder: (context, state) =>
-            const PlaceholderScreen(title: 'Offline Maps'),
+        builder: (context, state) => const NavigationMapsScreen(),
       ),
       GoRoute(
         path: yatraGuide,

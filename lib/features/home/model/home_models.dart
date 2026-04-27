@@ -33,12 +33,14 @@ class QuickAction {
   final String iconPath;
   final String route;
   final Color color;
+  final bool isFuture;
 
   const QuickAction({
     required this.title,
     required this.iconPath,
     required this.route,
     required this.color,
+    this.isFuture = false,
   });
 }
 

@@ -23,6 +23,8 @@ lib/
 3. **Emergency SOS**: Accessibility-first SOS trigger with rescue workflow tracking and incident history.
 4. **AI Assistant**: Conversational safety companion with offline-first FAQ knowledge base.
 5. **Weather & Forecast**: Real-time OpenWeather integration with AI-powered safety recommendations.
+6. **Grievance Redressal**: Action-oriented reporting system for pilgrims to communicate issues to authorities.
+7. **Navigation & Maps**: Offline-first mapping system with recommended pilgrim routes and offline mode indicators.
 ```
 
 ## 🔄 Data Flow
