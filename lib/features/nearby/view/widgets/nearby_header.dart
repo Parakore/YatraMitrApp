@@ -17,33 +17,21 @@ class NearbyHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Search Bar in a Premium Card
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextField(
-              onChanged: onSearchChanged,
-              decoration: InputDecoration(
-                hintText: 'Search facilities (ATM, Medical...)',
-                hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-                prefixIcon: const Icon(Icons.search, color: AppColors.primary, size: 20),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 14),
-              ),
+          TextField(
+            onChanged: onSearchChanged,
+            decoration: InputDecoration(
+              hintText: 'Search facilities (ATM, Medical...)',
+              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+              prefixIcon:
+                  const Icon(Icons.search, color: AppColors.primary, size: 20),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
           const SizedBox(height: 16),

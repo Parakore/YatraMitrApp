@@ -394,7 +394,7 @@ class HomeScreen extends ConsumerWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return GestureDetector(
-            onTap: () => context.push(item.route),
+            onTap: () => context.push(item.route, extra: item),
             child: Container(
               width: 100,
               margin: const EdgeInsets.symmetric(horizontal: 8),

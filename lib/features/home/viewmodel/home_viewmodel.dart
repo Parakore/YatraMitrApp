@@ -162,21 +162,25 @@ class HomeViewModel extends _$HomeViewModel {
           title: 'Health Tips',
           iconPath: 'assets/images/icons/health_tips.png',
           route: AppRouter.yatraGuide,
+          category: EssentialCategory.health,
         ),
         TravelEssential(
           title: 'Yatra\nGuidelines',
           iconPath: 'assets/images/icons/yatra_guidelines.png',
           route: AppRouter.yatraGuide,
+          category: EssentialCategory.guidelines,
         ),
         TravelEssential(
           title: 'Do\'s and\nDon\'ts',
           iconPath: 'assets/images/icons/dos_donts.png',
           route: AppRouter.yatraGuide,
+          category: EssentialCategory.rules,
         ),
         TravelEssential(
           title: 'Packaging\nChecklist',
           iconPath: 'assets/images/icons/packaging_checklist.png',
           route: AppRouter.yatraGuide,
+          category: EssentialCategory.packing,
         ),
       ],
       weatherAlert: const WeatherAlert(

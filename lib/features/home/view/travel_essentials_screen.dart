@@ -57,7 +57,7 @@ class TravelEssentialsScreen extends ConsumerWidget {
 
   Widget _buildEssentialCard(BuildContext context, TravelEssential item) {
     return GestureDetector(
-      onTap: () => context.push(item.route),
+      onTap: () => context.push(item.route, extra: item),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yatramitra/core/theme/app_colors.dart';
 import 'package:yatramitra/features/disaster/view/disaster_screen.dart';
 import '../../features/ai_assistant/view/ai_chat_screen.dart';
 import '../../features/emergency/view/emergency_screen.dart';
@@ -19,6 +20,8 @@ import '../../features/weather/view/weather_screen.dart';
 import '../../features/maps/view/navigation_maps_screen.dart';
 import '../../features/grievance/view/grievance_screen.dart';
 import '../../features/registration/view/yatra_registration_screen.dart';
+import '../../features/home/view/essential_detail_screen.dart';
+import '../../features/home/model/home_models.dart';
 
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
@@ -92,8 +95,16 @@ class AppRouter {
       ),
       GoRoute(
         path: yatraGuide,
-        builder: (context, state) =>
-            const PlaceholderScreen(title: 'Yatra Guide'),
+        builder: (context, state) {
+          final essential = state.extra as TravelEssential?;
+          if (essential == null) {
+            return const PlaceholderScreen(title: 'Yatra Guide');
+          }
+          return EssentialDetailScreen(
+            essential: essential,
+            details: _getDummyDetails(essential.category),
+          );
+        },
       ),
       GoRoute(
         path: crowdIntelligence,
@@ -167,5 +178,102 @@ class PlaceholderScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Helper to generate premium dummy data for Travel Essentials.
+TravelEssentialDetail _getDummyDetails(EssentialCategory category) {
+  switch (category) {
+    case EssentialCategory.health:
+      return const TravelEssentialDetail(
+        title: 'Health & Wellness Guide',
+        description:
+            'Maintaining your health at high altitudes is critical for a safe Yatra. Follow these essential tips to stay fit and energized.',
+        sections: [
+          EssentialSection(
+            title: 'Altitude Sickness (AMS)',
+            content:
+                'Ascend slowly. If you feel headache or nausea, descend immediately. Drink 4-5 liters of water daily.',
+            icon: Icons.terrain_rounded,
+            accentColor: AppColors.error,
+          ),
+          EssentialSection(
+            title: 'Hydration & Nutrition',
+            content:
+                'Carry energetic snacks like dark chocolate, nuts, and glucose. Avoid heavy meals before trekking.',
+            icon: Icons.water_drop_rounded,
+            accentColor: AppColors.primary,
+          ),
+          EssentialSection(
+            title: 'Hygiene Practices',
+            content:
+                'Use hand sanitizers frequently. Drink only boiled or bottled water to avoid stomach infections.',
+            icon: Icons.clean_hands_rounded,
+            accentColor: AppColors.success,
+          ),
+        ],
+      );
+    case EssentialCategory.packing:
+      return const TravelEssentialDetail(
+        title: 'Essential Packing List',
+        description:
+            'A well-packed bag is the key to a comfortable trek. Check off these items as you prepare for your journey.',
+        sections: [],
+        checklist: [
+          ChecklistItem(item: 'Heavy Woolen Jacket', category: 'Clothing'),
+          ChecklistItem(item: 'Thermal Innerwear', category: 'Clothing'),
+          ChecklistItem(item: 'Raincoat/Poncho', category: 'Clothing'),
+          ChecklistItem(item: 'Sturdy Trekking Boots', category: 'Footwear'),
+          ChecklistItem(item: 'Woolen Socks (3 pairs)', category: 'Footwear'),
+          ChecklistItem(item: 'Personal Medications', category: 'Medical'),
+          ChecklistItem(item: 'First-Aid Kit', category: 'Medical'),
+          ChecklistItem(item: 'Power Bank', category: 'Electronics'),
+          ChecklistItem(item: 'Flashlight/Torch', category: 'Electronics'),
+        ],
+      );
+    case EssentialCategory.guidelines:
+      return const TravelEssentialDetail(
+        title: 'Official Yatra Guidelines',
+        description:
+            'Follow these government-mandated guidelines to ensure a smooth and legal pilgrimage experience.',
+        sections: [
+          EssentialSection(
+            title: 'Biometric Registration',
+            content:
+                'Ensure you have your physical copy of the registration slip. It will be scanned at multiple checkpoints.',
+            icon: Icons.fingerprint_rounded,
+            accentColor: AppColors.secondary,
+          ),
+          EssentialSection(
+            title: 'Reporting Timings',
+            content:
+                'Arrive at the base camp before 9:00 AM. Trekking after 4:00 PM is strictly prohibited for safety.',
+            icon: Icons.timer_rounded,
+            accentColor: AppColors.warning,
+          ),
+        ],
+      );
+    case EssentialCategory.rules:
+      return const TravelEssentialDetail(
+        title: 'Do\'s and Don\'ts',
+        description:
+            'Respect the local culture and the fragile mountain ecosystem by following these simple rules.',
+        sections: [
+          EssentialSection(
+            title: 'DO: Respect Local Traditions',
+            content:
+                'Dress modestly and take permission before taking photos of locals or religious ceremonies.',
+            icon: Icons.check_circle_rounded,
+            accentColor: AppColors.success,
+          ),
+          EssentialSection(
+            title: 'DON\'T: Litter the Mountains',
+            content:
+                'Carry all your plastic waste back to the base camp. Fines up to ₹5000 apply for littering.',
+            icon: Icons.cancel_rounded,
+            accentColor: AppColors.error,
+          ),
+        ],
+      );
   }
 }
