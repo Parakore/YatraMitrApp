@@ -971,28 +971,28 @@ class DhamDetailScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           ...dham.advisories.map((a) => Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 24),
                 child: Column(
                   children: [
                     Text(
-                      a.title.toUpperCase(),
+                      a.title,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 12,
+                        fontSize: 15,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 1,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     Text(
                       a.message,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 11,
+                        fontSize: 13,
                         height: 1.5,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],

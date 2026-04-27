@@ -114,19 +114,20 @@ class DhamDetailViewModel extends _$DhamDetailViewModel {
           ),
         ],
         advisories: [
-          SafetyAdvisory(
-            title: 'Altitude Warning',
+          const SafetyAdvisory(
+            title: '🔴 High Altitude Warning',
             message:
-                'High altitude sickness can occur. Take breaks and stay hydrated.',
+                'Pilgrims with heart / lung issues must consult a doctor.',
           ),
-          SafetyAdvisory(
-            title: 'Weather Conditions',
+          const SafetyAdvisory(
+            title: '🌧️ Weather Conditions',
             message:
-                'Weather changes rapidly. Carry heavy woolens and raincoats.',
+                'The trek may be suspended during heavy rain or landslides.',
           ),
-          SafetyAdvisory(
-            title: 'Fraud Awareness',
-            message: 'Book only through official government websites/counters.',
+          const SafetyAdvisory(
+            title: '⚠️ Fraud Awareness',
+            message:
+                'Only book via official government websites.\nDo not pay middlemen for registration.',
           ),
         ],
       );
@@ -164,7 +165,21 @@ class DhamDetailViewModel extends _$DhamDetailViewModel {
       transports: [],
       routeSteps: [],
       facilities: [],
-      advisories: [],
+      advisories: [
+        const SafetyAdvisory(
+          title: '🔴 High Altitude Warning',
+          message: 'Pilgrims with heart / lung issues must consult a doctor.',
+        ),
+        const SafetyAdvisory(
+          title: '🌧️ Weather Conditions',
+          message: 'The trek may be suspended during heavy rain or landslides.',
+        ),
+        const SafetyAdvisory(
+          title: '⚠️ Fraud Awareness',
+          message:
+              'Only book via official government websites.\nDo not pay middlemen for registration.',
+        ),
+      ],
     );
   }
 }
