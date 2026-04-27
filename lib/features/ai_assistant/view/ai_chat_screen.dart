@@ -8,7 +8,8 @@ import '../model/chat_message.dart';
 /// Screen for interacting with the AI Yatra Assistant.
 /// Mandatory: Chat bubble interface, suggestions, and high contrast.
 class AiChatScreen extends ConsumerStatefulWidget {
-  const AiChatScreen({super.key});
+  final String? initialMessage;
+  const AiChatScreen({super.key, this.initialMessage});
 
   @override
   ConsumerState<AiChatScreen> createState() => _AiChatScreenState();
@@ -17,6 +18,16 @@ class AiChatScreen extends ConsumerStatefulWidget {
 class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(aiAssistantViewModelProvider.notifier).sendMessage(widget.initialMessage!);
+      });
+    }
+  }
 
   @override
   void dispose() {

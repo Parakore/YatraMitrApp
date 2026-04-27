@@ -137,16 +137,28 @@ class DisasterService {
     final now = DateTime.now();
     return DisasterIntelligenceSummary(
       routeStatuses: [
-        RouteStatus(name: 'Kedarnath', status: 'CAUTION', lastUpdated: now),
-        RouteStatus(name: 'Badrinath', status: 'OPEN', lastUpdated: now),
-        RouteStatus(name: 'Yamunotri', status: 'CLOSED', lastUpdated: now),
-        RouteStatus(name: 'Gangotri', status: 'OPEN', lastUpdated: now),
+        RouteStatus(
+            name: 'Kedarnath',
+            status: 'CAUTION',
+            lastUpdated: now.subtract(const Duration(minutes: 5))),
+        RouteStatus(
+            name: 'Badrinath',
+            status: 'OPEN',
+            lastUpdated: now.subtract(const Duration(minutes: 12))),
+        RouteStatus(
+            name: 'Yamunotri',
+            status: 'CLOSED',
+            lastUpdated: now.subtract(const Duration(hours: 2))),
+        RouteStatus(
+            name: 'Gangotri',
+            status: 'OPEN',
+            lastUpdated: now.subtract(const Duration(minutes: 45))),
       ],
       weatherSummary: const WeatherSummary(
-        temperature: 8.5,
-        rainfall: 12.0,
-        visibility: 'Moderate',
-        condition: 'Cloudy with Light Rain',
+        temperature: 7.2,
+        rainfall: 14.5,
+        visibility: 'Poor',
+        condition: 'Heavy Fog & Drizzle',
       ),
       activeAlerts: [
         AlertModel(
@@ -158,12 +170,25 @@ class DisasterService {
               'Avoid stopping in this stretch. Move quickly to safety zones.',
         ),
         AlertModel(
+          type: 'Flash Flood',
+          location: 'Mandakini River Bank',
+          severity: 'Critical',
+          timestamp: now.subtract(const Duration(minutes: 5)),
+          action: 'Immediate evacuation of lower banks. Move to higher ground.',
+        ),
+        AlertModel(
+          type: 'Rockfall',
+          location: 'Jungle Chatti',
+          severity: 'Medium',
+          timestamp: now.subtract(const Duration(minutes: 40)),
+          action: 'Wear helmets and follow porter instructions strictly.',
+        ),
+        AlertModel(
           type: 'Rain',
           location: 'Gaurikund',
           severity: 'Medium',
           timestamp: now.subtract(const Duration(hours: 1)),
-          action:
-              'Heavy rain expected. Use rain protection and stay alert for flash floods.',
+          action: 'Heavy rain expected. Use rain protection and stay alert.',
         ),
       ],
       fiveDayForecast: [
@@ -180,39 +205,40 @@ class DisasterService {
         ),
         ForecastModel(
           date: now.add(const Duration(days: 1)),
-          condition: 'Cloudy',
-          temperature: 10.0,
-          rainfall: 5.0,
-          visibility: 'Moderate',
-          trekStatus: 'Proceed',
-          bestTravelWindow: '08:00 AM - 02:00 PM',
+          condition: 'Heavy Rain',
+          temperature: 6.0,
+          rainfall: 35.0,
+          visibility: 'Very Poor',
+          trekStatus: 'Avoid',
+          riskExplanation: 'Flash flood warning issued for Rambara area.',
+          bestTravelWindow: 'Stay Indoors',
         ),
         ForecastModel(
           date: now.add(const Duration(days: 2)),
+          condition: 'Cloudy',
+          temperature: 11.0,
+          rainfall: 4.0,
+          visibility: 'Moderate',
+          trekStatus: 'Proceed',
+          bestTravelWindow: '09:00 AM - 01:00 PM',
+        ),
+        ForecastModel(
+          date: now.add(const Duration(days: 3)),
           condition: 'Sunny',
-          temperature: 14.0,
+          temperature: 15.0,
           rainfall: 0.0,
           visibility: 'Good',
           trekStatus: 'Proceed',
           bestTravelWindow: 'Anytime before sunset',
         ),
         ForecastModel(
-          date: now.add(const Duration(days: 3)),
+          date: now.add(const Duration(days: 4)),
           condition: 'Stormy',
-          temperature: 6.0,
-          rainfall: 25.0,
+          temperature: 5.0,
+          rainfall: 28.0,
           visibility: 'Poor',
           trekStatus: 'Avoid',
-          riskExplanation:
-              'Severe thunderstorm predicted. High danger of lightning and rockfall.',
-        ),
-        ForecastModel(
-          date: now.add(const Duration(days: 4)),
-          condition: 'Cloudy',
-          temperature: 9.0,
-          rainfall: 2.0,
-          visibility: 'Moderate',
-          trekStatus: 'Proceed',
+          riskExplanation: 'Severe lightning predicted above 3000m.',
         ),
       ],
       landslideZones: [
@@ -229,6 +255,11 @@ class DisasterService {
         const LandslideZone(
             id: 'LZ-003',
             location: 'Linchauli',
+            riskLevel: 'High',
+            status: 'Active'),
+        const LandslideZone(
+            id: 'LZ-004',
+            location: 'Rambara Bridge',
             riskLevel: 'Low',
             status: 'Clear'),
       ],
@@ -239,12 +270,19 @@ class DisasterService {
           reason: 'Maintenance due to minor rockfall',
           estimatedReopenTime: '6:00 PM Today',
         ),
+        const RouteClosure(
+          routeName: 'Linchauri Upper Trail',
+          status: 'Full',
+          reason: 'Snow accumulation and black ice',
+          estimatedReopenTime: 'Tomorrow 10 AM',
+        ),
       ],
       aiRecommendations: [
-        'Start trek before 8 AM to avoid peak rain hours.',
-        'Avoid Bhimbali slope after noon as visibility drops significantly.',
-        'Carry rain protection and high-visibility gear.',
-        'Keep extra buffer time for Sonprayag stretch due to partial closure.',
+        'Start trek before 7 AM to avoid peak afternoon convection rain.',
+        'Emergency shelter available every 2km at designated yellow markers.',
+        'Avoid Bhimbali slope after noon as visibility drops to <500m.',
+        'Carry high-calorie food; temp drops expected to reach 2°C tonight.',
+        'Offline maps updated. Recalculate route via Jungle Chatti bypass.',
       ],
       lastUpdated: now,
     );

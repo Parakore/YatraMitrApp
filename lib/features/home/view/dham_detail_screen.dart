@@ -321,7 +321,7 @@ class DhamDetailScreen extends ConsumerWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () =>
-            context.push(AppRouter.comingSoon, extra: 'Yatra Registration'),
+            context.push(AppRouter.registration),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -804,10 +804,10 @@ class DhamDetailScreen extends ConsumerWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _buildAIOption('🎒 Packing'),
-                  _buildAIOption('🌤️ Weather'),
-                  _buildAIOption('👴 Senior Help'),
-                  _buildAIOption('🚁 Helicopter'),
+                  _buildAIOption(context, '🎒 Packing', 'What should I pack for Kedarnath?'),
+                  _buildAIOption(context, '🌤️ Weather', 'Tell me about the weather in Kedarnath.'),
+                  _buildAIOption(context, '👴 Senior Help', 'What facilities are available for senior citizens?'),
+                  _buildAIOption(context, '🚁 Helicopter', 'How to book a helicopter for Kedarnath?'),
                 ],
               ),
               const SizedBox(height: 20),
@@ -833,20 +833,24 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAIOption(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
+  Widget _buildAIOption(BuildContext context, String label, String query) {
+    return InkWell(
+      onTap: () => context.push(AppRouter.aiAssistant, extra: query),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
         ),
       ),
     );
@@ -1049,7 +1053,7 @@ class DhamDetailScreen extends ConsumerWidget {
           Expanded(
             flex: 3,
             child: ElevatedButton(
-              onPressed: () => context.push(AppRouter.comingSoon, extra: 'Yatra Registration'),
+              onPressed: () => context.push(AppRouter.registration),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

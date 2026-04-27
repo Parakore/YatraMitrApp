@@ -12,25 +12,34 @@ class HiveService {
   }
 
   /// Open a box
-  Future<Box<T>> openBox<T>(String boxName) async {
-    return await Hive.openBox<T>(boxName);
+  Future<Box> openBox(String boxName) async {
+    return await Hive.openBox(boxName);
   }
 
   /// Save data to a box
-  Future<void> putData<T>(String boxName, String key, T data) async {
-    final box = await openBox<T>(boxName);
+  Future<void> putData(String boxName, String key, dynamic data) async {
+    final box = await openBox(boxName);
     await box.put(key, data);
   }
 
   /// Get data from a box
   Future<T?> getData<T>(String boxName, String key) async {
-    final box = await openBox<T>(boxName);
-    return box.get(key);
+    final box = await openBox(boxName);
+    final data = box.get(key);
+    if (data == null) return null;
+    if (data is T) return data;
+    
+    // Handle List casting specifically for Hive
+    if (T.toString().startsWith('List') && data is List) {
+      return data as T;
+    }
+    
+    return null;
   }
 
   /// Clear a box
   Future<void> clearBox(String boxName) async {
-    final box = await Hive.openBox(boxName);
+    final box = await openBox(boxName);
     await box.clear();
   }
 }

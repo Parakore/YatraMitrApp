@@ -18,6 +18,7 @@ import '../../shared/widgets/future_feature_screen.dart';
 import '../../features/weather/view/weather_screen.dart';
 import '../../features/maps/view/navigation_maps_screen.dart';
 import '../../features/grievance/view/grievance_screen.dart';
+import '../../features/registration/view/yatra_registration_screen.dart';
 
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
@@ -40,6 +41,7 @@ class AppRouter {
 
   static const String comingSoon = '/coming-soon';
   static const String grievance = '/grievance';
+  static const String registration = '/registration';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -68,7 +70,10 @@ class AppRouter {
       ),
       GoRoute(
         path: aiAssistant,
-        builder: (context, state) => const AiChatScreen(),
+        builder: (context, state) {
+          final initialMessage = state.extra as String?;
+          return AiChatScreen(initialMessage: initialMessage);
+        },
       ),
       GoRoute(
         path: comingSoon,
@@ -124,6 +129,10 @@ class AppRouter {
       GoRoute(
         path: travelEssentials,
         builder: (context, state) => const TravelEssentialsScreen(),
+      ),
+      GoRoute(
+        path: registration,
+        builder: (context, state) => const YatraRegistrationScreen(),
       ),
     ],
   );

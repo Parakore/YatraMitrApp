@@ -15,20 +15,22 @@ class NearbyRepository {
   /// Get nearby places with offline support
   Future<List<NearbyPlace>> getNearbyPlaces() async {
     // 1. Try to get from cache first
-    final cachedData = await _hiveService.getData<List<dynamic>>(_boxName, 'list');
+    final cachedData = await _hiveService.getData<List>(_boxName, 'list');
     
-    // 2. Fetch from API in background or if cache is empty
+    // 2. Fetch from API
     try {
       final remoteData = await _service.fetchNearbyPlaces();
       
-      // 3. Update cache
+      // 3. Update cache with JSON-serialized data
       await _hiveService.putData(_boxName, 'list', remoteData.map((e) => e.toJson()).toList());
       
       return remoteData;
     } catch (e) {
-      // 4. Return cached data if API fails
+      // 4. Return cached data if API fails or offline
       if (cachedData != null) {
-        return cachedData.map((e) => NearbyPlace.fromJson(Map<String, dynamic>.from(e))).toList();
+        return cachedData
+            .map((e) => NearbyPlace.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
       }
       rethrow;
     }

@@ -49,32 +49,7 @@ class EmergencyCategories extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'SPECIFY EMERGENCY TYPE',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.secondary,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                'Optional, but helps dispatch the right team faster',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
+        const SizedBox(height: 12),
         SizedBox(
           height: 120,
           child: ListView.builder(

@@ -1,51 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/status_pill.dart';
 import '../viewmodel/emergency_viewmodel.dart';
 import '../model/sos_incident.dart';
 
+/// Premium Incident History Screen with global design alignment.
 class IncidentHistoryScreen extends ConsumerWidget {
   const IncidentHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final emergencyState = ref.watch(emergencyProvider);
-    final incidents = emergencyState
-        .recentIncidents; // In a real app, this might be a separate provider for full history
+    final incidents = emergencyState.recentIncidents;
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.pop(context),
-          color: Colors.white,
-        ),
         title: const Text(
           'Emergency Logs',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0.5,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0D1B2A),
+                Color(0xFF1A3A6B),
+              ],
+            ),
           ),
         ),
-        backgroundColor: AppColors.secondary,
-        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () => context.pop(),
+        ),
         centerTitle: true,
       ),
       body: Column(
         children: [
           _buildSummaryHeader(incidents.length),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(20),
-              itemCount: incidents.length,
-              itemBuilder: (context, index) {
-                final inc = incidents[index];
-                return _buildIncidentDetailCard(inc);
-              },
-            ),
+            child: emergencyState.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                    itemCount: incidents.length,
+                    itemBuilder: (context, index) {
+                      return _buildDetailedIncidentCard(incidents[index]);
+                    },
+                  ),
           ),
         ],
       ),
@@ -54,14 +61,23 @@ class IncidentHistoryScreen extends ConsumerWidget {
 
   Widget _buildSummaryHeader(int count) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Row(
         children: [
-          _buildStatItem('Total Incidents', count.toString(), AppColors.secondary),
-          const SizedBox(width: 20),
-          _buildStatItem('Resolved', '100%', AppColors.success),
-          const SizedBox(width: 20),
+          _buildStatItem('Total Cases', count.toString(), AppColors.secondary),
+          const SizedBox(width: 12),
+          _buildStatItem('Success Rate', '100%', AppColors.success),
+          const SizedBox(width: 12),
           _buildStatItem('Avg Response', '4.2m', AppColors.primary),
         ],
       ),
@@ -71,34 +87,32 @@ class IncidentHistoryScreen extends ConsumerWidget {
   Widget _buildStatItem(String label, String value, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
           color: color.withOpacity(0.05),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: color.withOpacity(0.1)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label,
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.bold)),
+            Text(
+              label,
+              style: TextStyle(fontSize: 9, color: Colors.grey[600], fontWeight: FontWeight.w900, letterSpacing: 0.5),
+            ),
             const SizedBox(height: 4),
-            Text(value,
-                style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w900, color: color)),
+            Text(
+              value,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: color),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildIncidentDetailCard(SosIncident inc) {
+  Widget _buildDetailedIncidentCard(SosIncident inc) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -111,65 +125,58 @@ class IncidentHistoryScreen extends ConsumerWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              StatusPill(
-                label: inc.status.toUpperCase(),
-                type: inc.status.toLowerCase() == 'resolved'
-                    ? StatusType.safe
-                    : StatusType.warning,
-              ),
-              Text(
-                inc.time,
-                style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      inc.id,
+                      style: TextStyle(color: Colors.grey[400], fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1),
+                    ),
+                    StatusPill(
+                      label: inc.status,
+                      type: inc.status.toLowerCase() == 'resolved' ? StatusType.safe : StatusType.danger,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  inc.pilgrim,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: AppColors.secondary),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  inc.type,
+                  style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                ),
+                const Divider(height: 32),
+                _buildInfoRow(Icons.location_on_outlined, 'Location', inc.location),
+                const SizedBox(height: 12),
+                _buildInfoRow(Icons.timer_outlined, 'Response', inc.responseTime),
+                const SizedBox(height: 12),
+                _buildInfoRow(Icons.shield_outlined, 'Agency', inc.agency),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            inc.pilgrim,
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: AppColors.secondary),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            inc.type,
-            style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.primary,
-                fontWeight: FontWeight.w800),
-          ),
-          const Divider(height: 32),
-          _buildDetailRow(Icons.location_on_outlined, 'Location', inc.location),
-          const SizedBox(height: 12),
-          _buildDetailRow(
-              Icons.timer_outlined, 'Response Time', inc.responseTime),
-          const SizedBox(height: 12),
-          _buildDetailRow(Icons.shield_outlined, 'Agency', inc.agency),
-          const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[50],
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
             ),
             child: Row(
               children: [
-                Icon(Icons.info_outline, size: 16, color: Colors.grey.shade600),
+                const Icon(Icons.info_outline, size: 16, color: AppColors.textSecondary),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Incident resolved by SDRF Team B. Pilgrim safely transported to Base Camp Medical Unit.',
-                    style: TextStyle(
-                        fontSize: 11, color: Colors.grey.shade600, height: 1.4),
+                    'Incident resolved by specialized response team. Pilgrim safely assisted at ${inc.location}.',
+                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.4),
                   ),
                 ),
               ],
@@ -180,23 +187,19 @@ class IncidentHistoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value) {
+  Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.grey.shade400),
+        Icon(icon, size: 18, color: Colors.grey[400]),
         const SizedBox(width: 12),
         Text(
           '$label:',
-          style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-              fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w600),
         ),
         const SizedBox(width: 8),
         Text(
           value,
-          style: const TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black87),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.secondary),
         ),
       ],
     );

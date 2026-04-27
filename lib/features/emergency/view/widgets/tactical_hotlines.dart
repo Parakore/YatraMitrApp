@@ -19,17 +19,8 @@ class TacticalHotlines extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Text(
-            'TACTICAL HOTLINES (ONE-TAP DIAL)',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w900,
-              color: AppColors.secondary,
-              letterSpacing: 1.2,
-            ),
-          ),
+        SizedBox(
+          height: 16,
         ),
         GridView.builder(
           shrinkWrap: true,

@@ -62,6 +62,34 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
     super.dispose();
   }
 
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 20,
+            decoration: BoxDecoration(
+              color: AppColors.saffron,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: AppColors.secondary,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final emergencyState = ref.watch(emergencyProvider);
@@ -105,13 +133,17 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
                     onCancel: () =>
                         ref.read(emergencyProvider.notifier).cancelSos(),
                   ),
+                  _buildSectionHeader('Emergency Context'),
                   EmergencyCategories(
                     selectedCategory: emergencyState.selectedCategory,
                     onCategorySelected: (cat) =>
                         ref.read(emergencyProvider.notifier).setCategory(cat),
                   ),
+                  _buildSectionHeader('Rescue Workflow'),
                   WorkflowTracker(steps: emergencyState.workflowSteps),
+                  _buildSectionHeader('Tactical Hotlines'),
                   TacticalHotlines(contacts: emergencyState.emergencyContacts),
+                  _buildSectionHeader('Incident Log History'),
                   RecentIncidentsList(
                     incidents: emergencyState.recentIncidents,
                     onViewAll: () => context.push('/emergency/history'),
