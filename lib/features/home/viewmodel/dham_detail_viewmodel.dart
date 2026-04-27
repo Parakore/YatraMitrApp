@@ -116,8 +116,7 @@ class DhamDetailViewModel extends _$DhamDetailViewModel {
         advisories: [
           const SafetyAdvisory(
             title: '🔴 High Altitude Warning',
-            message:
-                'Pilgrims with heart / lung issues must consult a doctor.',
+            message: 'Pilgrims with heart / lung issues must consult a doctor.',
           ),
           const SafetyAdvisory(
             title: '🌧️ Weather Conditions',
@@ -136,7 +135,7 @@ class DhamDetailViewModel extends _$DhamDetailViewModel {
     // Fallback/Default for other Dhams
     return DhamDetailModel(
       id: dhamId,
-      name: '${dhamId[0].toUpperCase()}${dhamId.substring(1)} Dham',
+      name: '${dhamId[0].toUpperCase()}${dhamId.substring(1)}',
       openingDate: 'Coming Soon',
       bestTime: 'May - Oct',
       altitude: '3,000m+',
