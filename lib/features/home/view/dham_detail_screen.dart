@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:yatramitra/core/router/app_router.dart';
+import 'package:yatramitra/features/home/model/home_models.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/status_pill.dart';
 import '../viewmodel/dham_detail_viewmodel.dart';
+import '../viewmodel/home_viewmodel.dart';
 import '../model/dham_detail_model.dart';
 
 class DhamDetailScreen extends ConsumerWidget {
@@ -13,11 +16,16 @@ class DhamDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stateAsync = ref.watch(dhamDetailViewModelProvider(dhamId));
+    final homeStateAsync = ref.watch(homeViewModelProvider);
 
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: stateAsync.when(
-        data: (dham) => _buildContent(context, dham),
+        data: (dham) => _buildContent(
+          context,
+          dham,
+          homeStateAsync.value?.quickActions ?? [],
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
       ),
@@ -25,7 +33,8 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, DhamDetailModel dham) {
+  Widget _buildContent(BuildContext context, DhamDetailModel dham,
+      List<QuickAction> quickActions) {
     return CustomScrollView(
       slivers: [
         _buildSliverAppBar(context, dham),
@@ -36,8 +45,9 @@ class DhamDetailScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(height: 16),
                 _buildInfoGrid(dham),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
                 _buildWeatherAndCrowd(dham),
                 const SizedBox(height: 32),
                 _buildActionSection(context),
@@ -50,10 +60,14 @@ class DhamDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
                 _buildAIAssistant(context),
                 const SizedBox(height: 32),
-                _buildOtherFacilities(dham),
+
+                _buildSectionHeader('Other Facilities',
+                    onSeeAll: () => context.push(AppRouter.quickActions)),
+                _buildQuickActions(context, quickActions),
+
                 const SizedBox(height: 32),
                 _buildSafetyAdvisory(dham),
-                const SizedBox(height: 120), // Space for fixed bottom buttons
+                const SizedBox(height: 32),
               ],
             ),
           ),
@@ -96,6 +110,7 @@ class DhamDetailScreen extends ConsumerWidget {
         const SizedBox(width: 8),
       ],
       flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
         title: Text(
           dham.name,
           style: const TextStyle(
@@ -105,7 +120,7 @@ class DhamDetailScreen extends ConsumerWidget {
             letterSpacing: 0.5,
           ),
         ),
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+        titlePadding: const EdgeInsets.only(bottom: 16),
         background: Stack(
           fit: StackFit.expand,
           children: [
@@ -170,7 +185,7 @@ class DhamDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  _buildStatusBadge(dham.status),
+                  // _buildStatusBadge(dham.status),
                 ],
               ),
             ),
@@ -180,31 +195,9 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatusBadge(DhamStatus status) {
-    switch (status) {
-      case DhamStatus.open:
-        return const StatusPill(
-          label: 'OPEN',
-          icon: Icons.check_circle_rounded,
-          type: StatusType.safe,
-        );
-      case DhamStatus.caution:
-        return const StatusPill(
-          label: 'CAUTION',
-          icon: Icons.warning_rounded,
-          type: StatusType.warning,
-        );
-      case DhamStatus.closed:
-        return const StatusPill(
-          label: 'CLOSED',
-          icon: Icons.cancel_rounded,
-          type: StatusType.danger,
-        );
-    }
-  }
-
   Widget _buildInfoGrid(DhamDetailModel dham) {
     return GridView.count(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
@@ -858,89 +851,76 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildOtherFacilities(DhamDetailModel dham) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSectionHeader(String title, {VoidCallback? onSeeAll}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Other Facilities',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text('View all',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 120,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dham.facilities.length,
-            itemBuilder: (context, index) {
-              final f = dham.facilities[index];
-              return Container(
-                width: 100,
-                margin: const EdgeInsets.only(right: 16, bottom: 8),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: f.iconPath.isNotEmpty
-                          ? Image.asset(
-                              f.iconPath,
-                              width: 24,
-                              height: 24,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(f.fallbackIcon,
-                                      color: AppColors.primary, size: 24),
-                            )
-                          : Icon(f.fallbackIcon,
-                              color: AppColors.primary, size: 24),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      f.name,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w900,
+            color: AppColors.textPrimary,
           ),
         ),
+        if (onSeeAll != null)
+          TextButton(
+            onPressed: onSeeAll,
+            child: const Text(
+              'View all',
+              style: TextStyle(
+                  color: AppColors.textSecondary, fontWeight: FontWeight.bold),
+            ),
+          ),
       ],
+    );
+  }
+
+  Widget _buildQuickActions(BuildContext context, List<QuickAction> actions) {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.zero,
+        itemCount: actions.length,
+        itemBuilder: (context, index) {
+          final action = actions[index];
+          return Container(
+            width: 85,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () => context.push(action.route),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(action.iconPath, width: 40, height: 40),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  action.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.bold, height: 1.1),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

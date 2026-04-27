@@ -32,13 +32,11 @@ class HomeScreen extends ConsumerWidget {
                       _buildHeroCarousel(context, state, ref),
                       const SizedBox(height: 24),
                       _buildSectionHeader('The Four Dhams',
-                          onSeeAll: () =>
-                              context.push(AppRouter.dhamListing)),
+                          onSeeAll: () => context.push(AppRouter.dhamListing)),
                       _buildDhamGrid(context, state.dhams),
                       const SizedBox(height: 24),
                       _buildSectionHeader('Quick Actions',
-                          onSeeAll: () =>
-                              context.push(AppRouter.quickActions)),
+                          onSeeAll: () => context.push(AppRouter.quickActions)),
                       _buildQuickActions(context, state.quickActions),
                       const SizedBox(height: 24),
                       if (state.weatherAlert != null) ...[
@@ -232,42 +230,42 @@ class HomeScreen extends ConsumerWidget {
                 fit: BoxFit.cover,
               ),
             ),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withValues(alpha: 0.8)
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.8)
+                  ],
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    dham.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  Text(
+                    dham.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white70, fontSize: 10),
+                  ),
                 ],
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  dham.name,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-                Text(
-                  dham.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white70, fontSize: 10),
-                ),
-              ],
-            ),
           ),
-        ),
-      );
-    },
+        );
+      },
     );
   }
 
