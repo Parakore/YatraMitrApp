@@ -100,14 +100,14 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.surface),
           onPressed: () => context.pop(),
         ),
         title: const Text(
-          'EMERGENCY SOS',
+          'SOS Emergency',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.surface,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.5,
           ),

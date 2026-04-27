@@ -56,8 +56,8 @@ class DhamDetailScreen extends ConsumerWidget {
                 // const SizedBox(height: 32),
                 _buildHelicopterCard(context, dham),
                 const SizedBox(height: 32),
-                _buildRouteSection(dham),
-                const SizedBox(height: 32),
+                // _buildRouteSection(dham),
+                // const SizedBox(height: 32),
                 _buildAIAssistant(context),
                 const SizedBox(height: 32),
 
@@ -320,8 +320,7 @@ class DhamDetailScreen extends ConsumerWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () =>
-            context.push(AppRouter.registration),
+        onPressed: () => context.push(AppRouter.registration),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -804,10 +803,14 @@ class DhamDetailScreen extends ConsumerWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _buildAIOption(context, '🎒 Packing', 'What should I pack for Kedarnath?'),
-                  _buildAIOption(context, '🌤️ Weather', 'Tell me about the weather in Kedarnath.'),
-                  _buildAIOption(context, '👴 Senior Help', 'What facilities are available for senior citizens?'),
-                  _buildAIOption(context, '🚁 Helicopter', 'How to book a helicopter for Kedarnath?'),
+                  _buildAIOption(context, '🎒 Packing',
+                      'What should I pack for Kedarnath?'),
+                  _buildAIOption(context, '🌤️ Weather',
+                      'Tell me about the weather in Kedarnath.'),
+                  _buildAIOption(context, '👴 Senior Help',
+                      'What facilities are available for senior citizens?'),
+                  _buildAIOption(context, '🚁 Helicopter',
+                      'How to book a helicopter for Kedarnath?'),
                 ],
               ),
               const SizedBox(height: 20),

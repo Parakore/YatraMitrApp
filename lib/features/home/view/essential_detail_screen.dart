@@ -21,44 +21,70 @@ class EssentialDetailScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.surface,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          essential.title.toUpperCase().replaceAll('\n', ' '),
+          essential.title.replaceAll('\n', ' '),
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.surface,
             fontWeight: FontWeight.w900,
             fontSize: 20,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0D1B2A),
+                Color(0xFF1A3A6B),
+              ],
+            ),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(height: 4, color: AppColors.saffron),
+              ),
+            ],
           ),
         ),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
-        color: AppColors.primary.withValues(alpha: 0.06),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionHeader('Overview'),
-            const SizedBox(height: 12),
-            Text(
-              details.description,
-              style: TextStyle(
-                fontSize: 15,
-                color: AppColors.textPrimary.withOpacity(0.8),
-                height: 1.6,
-                fontWeight: FontWeight.w500,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
+          color: AppColors.primary.withValues(alpha: 0.06),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionHeader('Overview'),
+              const SizedBox(height: 12),
+              Text(
+                details.description,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: AppColors.textPrimary.withOpacity(0.8),
+                  height: 1.6,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-            if (essential.category == EssentialCategory.packing)
-              _buildPackingChecklist()
-            else
-              _buildStandardSections(),
-          ],
+              const SizedBox(height: 32),
+              if (essential.category == EssentialCategory.packing)
+                _buildPackingChecklist()
+              else
+                _buildStandardSections(),
+            ],
+          ),
         ),
       ),
 

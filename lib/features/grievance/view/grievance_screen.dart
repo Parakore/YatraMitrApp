@@ -365,7 +365,7 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
                 width: 20,
                 child: CircularProgressIndicator(
                     color: Colors.white, strokeWidth: 2))
-            : const Text('SUBMIT COMPLAINT',
+            : const Text('Submit Complaint',
                 style:
                     TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.1)),
       ),
