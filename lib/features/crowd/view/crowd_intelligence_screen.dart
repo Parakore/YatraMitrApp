@@ -41,7 +41,7 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
           const SizedBox(width: 8),
         ],
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -50,11 +50,14 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
                 Color(0xFF1A3A6B),
               ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(77),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(height: 4, color: AppColors.saffron),
               ),
             ],
           ),

@@ -18,17 +18,37 @@ class WeatherScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
-          'Weather & Safety',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          'WEATHER & SAFETY',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
+          ),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppColors.secondary, AppColors.blueDark],
+              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
             ),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(height: 4, color: AppColors.saffron),
+              ),
+            ],
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
