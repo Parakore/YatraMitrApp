@@ -66,7 +66,9 @@ class DisasterScreen extends ConsumerWidget {
                 const LoadingWidget(message: 'Analyzing safety data...'),
             error: (error, stack) => AppErrorWidget(
               errorMessage: error.toString(),
-              onRetry: () => ref.read(disasterIntelligenceViewModelProvider.notifier).refresh(),
+              onRetry: () => ref
+                  .read(disasterIntelligenceViewModelProvider.notifier)
+                  .refresh(),
             ),
           ),
         ),
@@ -144,7 +146,8 @@ class DisasterScreen extends ConsumerWidget {
           Center(
             child: Column(
               children: [
-                const Icon(Icons.update, size: 16, color: AppColors.textSecondary),
+                const Icon(Icons.update,
+                    size: 16, color: AppColors.textSecondary),
                 const SizedBox(height: 4),
                 Text(
                   'Last Updated: ${summary.lastUpdated.hour}:${summary.lastUpdated.minute.toString().padLeft(2, '0')} ${summary.lastUpdated.hour >= 12 ? 'PM' : 'AM'}',

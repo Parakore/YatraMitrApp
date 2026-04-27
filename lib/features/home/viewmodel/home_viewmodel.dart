@@ -133,9 +133,8 @@ class HomeViewModel extends _$HomeViewModel {
         QuickAction(
           title: 'Crowd\nIntel',
           iconPath: 'assets/images/icons/duration.png', // Placeholder
-          route: '/coming-soon',
+          route: AppRouter.crowdIntelligence,
           color: AppColors.purple,
-          isFuture: true,
         ),
         QuickAction(
           title: 'Facility\nLocator',
