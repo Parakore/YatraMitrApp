@@ -9,6 +9,7 @@ import 'package:yatramitra/features/emergency/view/widgets/sos_hero_section.dart
 import 'package:yatramitra/features/emergency/view/widgets/workflow_tracker.dart';
 import 'package:yatramitra/features/emergency/view/widgets/tactical_hotlines.dart';
 import 'package:yatramitra/features/emergency/view/widgets/recent_incidents_list.dart';
+import 'package:yatramitra/features/emergency/view/widgets/emergency_categories.dart';
 
 class EmergencyScreen extends ConsumerStatefulWidget {
   const EmergencyScreen({super.key});
@@ -73,7 +74,7 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
           onPressed: () => context.pop(),
         ),
         title: const Text(
-          'EMERGENCY CONTROL',
+          'SOS - Emergency',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w900,
@@ -101,7 +102,13 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
                     sosProgress: _sosProgress,
                     onSosHoldStart: _startSosTimer,
                     onSosHoldEnd: _stopSosTimer,
-                    onCancel: () => ref.read(emergencyProvider.notifier).cancelSos(),
+                    onCancel: () =>
+                        ref.read(emergencyProvider.notifier).cancelSos(),
+                  ),
+                  EmergencyCategories(
+                    selectedCategory: emergencyState.selectedCategory,
+                    onCategorySelected: (cat) =>
+                        ref.read(emergencyProvider.notifier).setCategory(cat),
                   ),
                   WorkflowTracker(steps: emergencyState.workflowSteps),
                   TacticalHotlines(contacts: emergencyState.emergencyContacts),

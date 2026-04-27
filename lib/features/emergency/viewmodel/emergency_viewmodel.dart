@@ -12,6 +12,7 @@ class EmergencyState {
   final bool isSosActive;
   final bool isLoading;
   final String? lastLocation;
+  final String? selectedCategory;
   final List<Map<String, String>> emergencyContacts;
   final List<SosIncident> recentIncidents;
   final List<EmergencyWorkflowStep> workflowSteps;
@@ -20,6 +21,7 @@ class EmergencyState {
     required this.isSosActive,
     this.isLoading = false,
     this.lastLocation,
+    this.selectedCategory,
     required this.emergencyContacts,
     required this.recentIncidents,
     required this.workflowSteps,
@@ -29,6 +31,7 @@ class EmergencyState {
     bool? isSosActive,
     bool? isLoading,
     String? lastLocation,
+    String? selectedCategory,
     List<Map<String, String>>? emergencyContacts,
     List<SosIncident>? recentIncidents,
     List<EmergencyWorkflowStep>? workflowSteps,
@@ -37,6 +40,7 @@ class EmergencyState {
       isSosActive: isSosActive ?? this.isSosActive,
       isLoading: isLoading ?? this.isLoading,
       lastLocation: lastLocation ?? this.lastLocation,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
       emergencyContacts: emergencyContacts ?? this.emergencyContacts,
       recentIncidents: recentIncidents ?? this.recentIncidents,
       workflowSteps: workflowSteps ?? this.workflowSteps,
@@ -75,6 +79,14 @@ class EmergencyViewModel extends StateNotifier<EmergencyState> {
     }
   }
 
+  void setCategory(String category) {
+    if (state.selectedCategory == category) {
+      state = state.copyWith(selectedCategory: null);
+    } else {
+      state = state.copyWith(selectedCategory: category);
+    }
+  }
+
   void triggerSos() {
     state = state.copyWith(
       isSosActive: true,
@@ -89,6 +101,7 @@ class EmergencyViewModel extends StateNotifier<EmergencyState> {
   void cancelSos() {
     state = state.copyWith(
       isSosActive: false,
+      selectedCategory: null,
       workflowSteps: state.workflowSteps.map((e) => e.copyWith(active: false)).toList(),
     );
   }
