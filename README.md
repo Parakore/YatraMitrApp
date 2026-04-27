@@ -30,7 +30,7 @@ Detailed info can be found in [ARCHITECTURE.md](file:///d:/Flutter%20Projects/Cl
 
 ## ✨ Key Features
 - 👥 **Crowd Intelligence**: Real-time density monitoring and predictive wait times for shrines.
-- ⚖️ **Grievance Redressal**: Geo-evidence based complaint system with 5-step SLA tracking.
+- ⚖️ **Grievance Redressal**: Geo-evidence based complaint system with 5-step SLA tracking and photo upload.
 - 🆘 **Emergency SOS**: Accessibility-first SOS with rescue workflow management.
 - 🤖 **AI Assistant**: Offline-first conversational companion for pilgrim safety.
 - 🗺️ **Offline Navigation**: Optimized routes with local caching for low-network zones.
@@ -42,6 +42,8 @@ Detailed info can be found in [ARCHITECTURE.md](file:///d:/Flutter%20Projects/Cl
 - **Local Storage**: [Hive](https://pub.dev/packages/hive) (Offline-first)
 - **Settings**: [SharedPreferences](https://pub.dev/packages/shared_preferences)
 - **Code Generation**: Freezed, JsonSerializable, Riverpod Generator
+- **Permissions**: permission_handler
+- **Media**: image_picker
 
 ## 📜 Engineering Rules
 Strict adherence to our [RULES.md](file:///d:/Flutter%20Projects/Client's%20Project/YatraMitrApp/RULES.md) is required for all contributions.

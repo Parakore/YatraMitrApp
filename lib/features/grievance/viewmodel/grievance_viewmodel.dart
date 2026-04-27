@@ -6,22 +6,26 @@ class GrievanceState {
   final List<Grievance> grievances;
   final List<GrievanceCategory> categories;
   final bool isLoading;
+  final String? pickedImagePath;
 
   GrievanceState({
     this.grievances = const [],
     this.categories = const [],
     this.isLoading = false,
+    this.pickedImagePath,
   });
 
   GrievanceState copyWith({
     List<Grievance>? grievances,
     List<GrievanceCategory>? categories,
     bool? isLoading,
+    String? pickedImagePath,
   }) {
     return GrievanceState(
       grievances: grievances ?? this.grievances,
       categories: categories ?? this.categories,
       isLoading: isLoading ?? this.isLoading,
+      pickedImagePath: pickedImagePath ?? this.pickedImagePath,
     );
   }
 }
@@ -105,6 +109,7 @@ class GrievanceViewModel extends StateNotifier<GrievanceState> {
       timestamp: DateTime.now(),
       status: GrievanceStatus.pending,
       geoTag: 'Current Location (Auto)',
+      photoUrl: state.pickedImagePath,
     );
 
     state = state.copyWith(
@@ -113,38 +118,53 @@ class GrievanceViewModel extends StateNotifier<GrievanceState> {
 
     // Step 2: AI Dept. Allocation Simulation
     await Future.delayed(const Duration(seconds: 2));
-    
+
     final updatedGrievance = newGrievance.copyWith(
       status: GrievanceStatus.allocating,
       department: _assignDepartment(category),
     );
 
     state = state.copyWith(
-      grievances: state.grievances.map((g) => g.id == newGrievance.id ? updatedGrievance : g).toList(),
+      grievances: state.grievances
+          .map((g) => g.id == newGrievance.id ? updatedGrievance : g)
+          .toList(),
     );
 
     // Step 3: SLA Started
     await Future.delayed(const Duration(seconds: 1));
-    
+
     final slaGrievance = updatedGrievance.copyWith(
       status: GrievanceStatus.inProgress,
       sla: '12 hrs remaining',
     );
 
     state = state.copyWith(
-      grievances: state.grievances.map((g) => g.id == newGrievance.id ? slaGrievance : g).toList(),
+      grievances: state.grievances
+          .map((g) => g.id == newGrievance.id ? slaGrievance : g)
+          .toList(),
       isLoading: false,
+      pickedImagePath: null, // Clear after success
     );
+  }
+
+  void setPickedImage(String? path) {
+    state = state.copyWith(pickedImagePath: path);
   }
 
   String _assignDepartment(String category) {
     switch (category) {
-      case 'Sanitation': return 'SDMC';
-      case 'Medical': return 'Health Dept';
-      case 'Overcharging': return 'Tourist Police';
-      case 'Road Block': return 'NHAI / BRO';
-      case 'Water Supply': return 'Jal Sansthan';
-      default: return 'District Admin';
+      case 'Sanitation':
+        return 'SDMC';
+      case 'Medical':
+        return 'Health Dept';
+      case 'Overcharging':
+        return 'Tourist Police';
+      case 'Road Block':
+        return 'NHAI / BRO';
+      case 'Water Supply':
+        return 'Jal Sansthan';
+      default:
+        return 'District Admin';
     }
   }
 }

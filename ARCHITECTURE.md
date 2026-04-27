@@ -23,7 +23,7 @@ lib/
 3. **Emergency SOS**: Accessibility-first SOS trigger with rescue workflow tracking and incident history.
 4. **AI Assistant**: Conversational safety companion with offline-first FAQ knowledge base.
 5. **Weather & Forecast**: Real-time OpenWeather integration with AI-powered safety recommendations.
-6. **Grievance Redressal**: Geo-evidence based complaint system featuring a 5-step 'Mission Control' workflow. Includes AI department allocation, SLA tracking, and a dedicated high-fidelity resolution tracking screen for real-time status updates.
+6. **Grievance Redressal**: Geo-evidence based complaint system featuring a 5-step 'Mission Control' workflow. Includes AI department allocation, SLA tracking, and photo evidence upload via Camera/Gallery for real-time status updates.
 7. **Navigation & Maps**: Offline-first mapping system with recommended pilgrim routes and offline mode indicators.
 ```
 

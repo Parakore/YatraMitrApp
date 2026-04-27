@@ -5,6 +5,9 @@ import '../viewmodel/grievance_viewmodel.dart';
 import '../model/grievance_model.dart';
 import '../../../core/router/app_router.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../../../core/services/permission_service.dart';
 
 class GrievanceScreen extends ConsumerStatefulWidget {
   const GrievanceScreen({super.key});
@@ -21,6 +24,76 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
   void dispose() {
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final permissionService = ref.read(permissionServiceProvider.notifier);
+    
+    // Show selection dialog
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
+              title: const Text('Take Photo', style: TextStyle(fontWeight: FontWeight.bold)),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_rounded, color: AppColors.primary),
+              title: const Text('Choose from Gallery', style: TextStyle(fontWeight: FontWeight.bold)),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null) return;
+
+    // Check permissions
+    bool hasPermission = false;
+    if (source == ImageSource.camera) {
+      hasPermission = await permissionService.requestCameraPermission();
+    } else {
+      hasPermission = await permissionService.requestGalleryPermission();
+    }
+
+    if (!hasPermission) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Permission denied. Please enable it in settings.')),
+        );
+      }
+      return;
+    }
+
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+      source: source,
+      imageQuality: 70, // Optimize for upload
+    );
+
+    if (image != null) {
+      ref.read(grievanceViewModelProvider.notifier).setPickedImage(image.path);
+    }
   }
 
   void _submit() async {
@@ -223,9 +296,9 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
                 child: const Row(
                   children: [
                     Icon(Icons.gps_fixed, size: 10, color: AppColors.success),
-                    SizedBox(width: 4),
-                    Text('SECURE',
-                        style: TextStyle(
+                    const SizedBox(width: 4),
+                    const Text('SECURE',
+                        style: const TextStyle(
                             color: AppColors.success,
                             fontSize: 9,
                             fontWeight: FontWeight.bold)),
@@ -235,34 +308,59 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Container(
-            height: 60,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                  color: Colors.grey.shade300, style: BorderStyle.none),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {}, // Add photo logic
-                borderRadius: BorderRadius.circular(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add_a_photo_rounded,
-                        color: Colors.grey.shade600, size: 24),
-                    const SizedBox(width: 10),
-                    Text('Upload Photo Evidence',
-                        style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.bold)),
-                  ],
+          Consumer(
+            builder: (context, ref, child) {
+              final pickedImage = ref.watch(grievanceViewModelProvider
+                  .select((s) => s.pickedImagePath));
+              return Container(
+                height: pickedImage != null ? 120 : 60,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                      color: Colors.grey.shade300,
+                      style: pickedImage != null
+                          ? BorderStyle.solid
+                          : BorderStyle.none),
+                  image: pickedImage != null
+                      ? DecorationImage(
+                          image: FileImage(File(pickedImage)),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
-              ),
-            ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _pickImage,
+                    borderRadius: BorderRadius.circular(12),
+                    child: pickedImage != null
+                        ? Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              icon: const Icon(Icons.cancel, color: Colors.red),
+                              onPressed: () => ref
+                                  .read(grievanceViewModelProvider.notifier)
+                                  .setPickedImage(null),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_a_photo_rounded,
+                                  color: Colors.grey.shade600, size: 24),
+                              const SizedBox(width: 10),
+                              Text('Upload Photo Evidence',
+                                  style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

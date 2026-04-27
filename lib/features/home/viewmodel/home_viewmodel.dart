@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../model/home_models.dart';
+import '../../../core/services/permission_service.dart';
 
 part 'home_viewmodel.g.dart';
 
@@ -47,6 +48,10 @@ class HomeState {
 class HomeViewModel extends _$HomeViewModel {
   @override
   FutureOr<HomeState> build() async {
+    // Request notification permissions on startup
+    // We don't await this as we don't want to block the UI loading
+    ref.read(permissionServiceProvider.notifier).requestNotificationPermission();
+
     // Simulated initial data fetch
     // In a real app, this would come from a repository
     return HomeState(
