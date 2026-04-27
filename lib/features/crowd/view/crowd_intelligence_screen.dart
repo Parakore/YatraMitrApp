@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/kpi_card.dart';
 import '../../../shared/widgets/status_pill.dart';
 import '../viewmodel/crowd_viewmodel.dart';
 import '../model/crowd_status.dart';

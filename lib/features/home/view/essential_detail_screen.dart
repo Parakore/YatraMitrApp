@@ -73,7 +73,7 @@ class EssentialDetailScreen extends StatelessWidget {
                 details.description,
                 style: TextStyle(
                   fontSize: 15,
-                  color: AppColors.textPrimary.withOpacity(0.8),
+                  color: AppColors.textPrimary.withValues(alpha: 0.8),
                   height: 1.6,
                   fontWeight: FontWeight.w500,
                 ),
@@ -103,7 +103,7 @@ class EssentialDetailScreen extends StatelessWidget {
       //               details.description,
       //               style: TextStyle(
       //                 fontSize: 15,
-      //                 color: AppColors.textPrimary.withOpacity(0.8),
+      //                 color: AppColors.textPrimary.withValues(alpha: 0.8),
       //                 height: 1.6,
       //                 fontWeight: FontWeight.w500,
       //               ),
@@ -119,65 +119,6 @@ class EssentialDetailScreen extends StatelessWidget {
       //     ),
       //   ],
       // ),
-    );
-  }
-
-  Widget _buildSliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 180.0,
-      floating: false,
-      pinned: true,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          essential.title.toUpperCase().replaceAll('\n', ' '),
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            fontSize: 16,
-            letterSpacing: 1.5,
-          ),
-        ),
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF0D1B2A), Color(0xFF1E3A8A)],
-                ),
-              ),
-            ),
-            Positioned(
-              right: -20,
-              bottom: -20,
-              child: Opacity(
-                opacity: 0.1,
-                child: Image.asset(
-                  essential.iconPath,
-                  width: 150,
-                  height: 150,
-                ),
-              ),
-            ),
-            // Saffron Accent Line
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 4,
-                color: AppColors.saffron,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -218,7 +159,7 @@ class EssentialDetailScreen extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade100, width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withValues(alpha: 0.03),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -233,7 +174,7 @@ class EssentialDetailScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: (section.accentColor ?? AppColors.primary)
-                          .withOpacity(0.1),
+                          .withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -260,7 +201,7 @@ class EssentialDetailScreen extends StatelessWidget {
                 section.content,
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.textPrimary.withOpacity(0.7),
+                  color: AppColors.textPrimary.withValues(alpha: 0.7),
                   height: 1.5,
                   fontWeight: FontWeight.w500,
                 ),
@@ -294,7 +235,7 @@ class EssentialDetailScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.textSecondary.withOpacity(0.6),
+                  color: AppColors.textSecondary.withValues(alpha: 0.6),
                   letterSpacing: 1.0,
                 ),
               ),

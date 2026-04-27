@@ -129,9 +129,9 @@ class GrievanceDetailScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         grievance.status.name.toUpperCase(),
@@ -153,7 +153,7 @@ class GrievanceDetailScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 15,
               offset: const Offset(0, 5))
         ],
@@ -345,7 +345,7 @@ class GrievanceDetailScreen extends ConsumerWidget {
         gradient: const LinearGradient(
             colors: [Color(0xFFF1F9F1), Color(0xFFE8F5E9)]),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.success.withOpacity(0.1)),
+        border: Border.all(color: AppColors.success.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [

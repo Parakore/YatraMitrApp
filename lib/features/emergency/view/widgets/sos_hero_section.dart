@@ -30,7 +30,7 @@ class SosHeroSection extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             AppColors.secondary,
-            AppColors.secondary.withOpacity(0.8),
+            AppColors.secondary.withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -42,7 +42,7 @@ class SosHeroSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
+                color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: Colors.white24),
               ),
@@ -77,7 +77,7 @@ class SosHeroSection extends StatelessWidget {
                 ),
               ),
               style: TextButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.1),
+                backgroundColor: Colors.white.withValues(alpha: 0.1),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -125,7 +125,7 @@ class SosHeroSection extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -137,7 +137,7 @@ class SosHeroSection extends StatelessWidget {
             child: CircularProgressIndicator(
               value: sosProgress,
               strokeWidth: 10,
-              backgroundColor: Colors.white.withOpacity(0.1),
+              backgroundColor: Colors.white.withValues(alpha: 0.1),
               valueColor:
                   const AlwaysStoppedAnimation<Color>(AppColors.primary),
             ),
@@ -153,7 +153,7 @@ class SosHeroSection extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: (isSosActive ? AppColors.primary : AppColors.saffron)
-                      .withOpacity(0.4),
+                      .withValues(alpha: 0.4),
                   blurRadius: 25,
                   spreadRadius: 5,
                 ),

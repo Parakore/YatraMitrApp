@@ -67,7 +67,7 @@ class RecentIncidentsList extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade100, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -84,11 +84,14 @@ class RecentIncidentsList extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: (isResolved ? Colors.green : AppColors.primary).withOpacity(0.1),
+                    color: (isResolved ? Colors.green : AppColors.primary)
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
-                    isResolved ? Icons.check_circle_outline : Icons.emergency_share_rounded,
+                    isResolved
+                        ? Icons.check_circle_outline
+                        : Icons.emergency_share_rounded,
                     color: isResolved ? Colors.green : AppColors.primary,
                     size: 24,
                   ),
@@ -107,7 +110,8 @@ class RecentIncidentsList extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w900,
-                              color: isResolved ? Colors.green : AppColors.primary,
+                              color:
+                                  isResolved ? Colors.green : AppColors.primary,
                               letterSpacing: 1,
                             ),
                           ),
@@ -133,7 +137,8 @@ class RecentIncidentsList extends StatelessWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.location_on_outlined, size: 12, color: Colors.grey.shade600),
+                          Icon(Icons.location_on_outlined,
+                              size: 12, color: Colors.grey.shade600),
                           const SizedBox(width: 4),
                           Text(
                             'Kedarnath Sector 4', // Mock location
@@ -156,7 +161,8 @@ class RecentIncidentsList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.grey.shade50,
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(bottom: Radius.circular(20)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,7 +213,8 @@ class RecentIncidentsList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 40),
         child: Column(
           children: [
-            Icon(Icons.history_toggle_off, size: 48, color: Colors.grey.shade300),
+            Icon(Icons.history_toggle_off,
+                size: 48, color: Colors.grey.shade300),
             const SizedBox(height: 16),
             Text(
               'No recent incidents reported',

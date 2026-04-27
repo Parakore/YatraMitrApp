@@ -28,7 +28,7 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
 
   Future<void> _pickImage() async {
     final permissionService = ref.read(permissionServiceProvider.notifier);
-    
+
     // Show selection dialog
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -51,13 +51,17 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
             ),
             const SizedBox(height: 20),
             ListTile(
-              leading: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
-              title: const Text('Take Photo', style: TextStyle(fontWeight: FontWeight.bold)),
+              leading: const Icon(Icons.camera_alt_rounded,
+                  color: AppColors.primary),
+              title: const Text('Take Photo',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               onTap: () => Navigator.pop(context, ImageSource.camera),
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library_rounded, color: AppColors.primary),
-              title: const Text('Choose from Gallery', style: TextStyle(fontWeight: FontWeight.bold)),
+              leading: const Icon(Icons.photo_library_rounded,
+                  color: AppColors.primary),
+              title: const Text('Choose from Gallery',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
             const SizedBox(height: 20),
@@ -79,7 +83,9 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
     if (!hasPermission) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permission denied. Please enable it in settings.')),
+          const SnackBar(
+              content:
+                  Text('Permission denied. Please enable it in settings.')),
         );
       }
       return;
@@ -296,9 +302,9 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
                 child: const Row(
                   children: [
                     Icon(Icons.gps_fixed, size: 10, color: AppColors.success),
-                    const SizedBox(width: 4),
-                    const Text('SECURE',
-                        style: const TextStyle(
+                    SizedBox(width: 4),
+                    Text('SECURE',
+                        style: TextStyle(
                             color: AppColors.success,
                             fontSize: 9,
                             fontWeight: FontWeight.bold)),
@@ -310,8 +316,8 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
           const SizedBox(height: 12),
           Consumer(
             builder: (context, ref, child) {
-              final pickedImage = ref.watch(grievanceViewModelProvider
-                  .select((s) => s.pickedImagePath));
+              final pickedImage = ref.watch(
+                  grievanceViewModelProvider.select((s) => s.pickedImagePath));
               return Container(
                 height: pickedImage != null ? 120 : 60,
                 width: double.infinity,
@@ -466,77 +472,6 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
             : const Text('Submit Complaint',
                 style:
                     TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.1)),
-      ),
-    );
-  }
-
-  Widget _buildWorkflowTracker() {
-    final steps = [
-      'Submit',
-      'AI Allocation',
-      'SLA Started',
-      'Action Taken',
-      'Resolution'
-    ];
-    return Container(
-      height: 100,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(steps.length, (index) {
-          return Expanded(
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (index < steps.length - 1)
-                      Positioned(
-                        left: 25,
-                        right: -25,
-                        child:
-                            Container(height: 2, color: Colors.grey.shade200),
-                      ),
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: index == 0 ? AppColors.primary : Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: index == 0
-                                ? AppColors.primary
-                                : Colors.grey.shade300,
-                            width: 2),
-                      ),
-                      child: Center(
-                        child: index == 0
-                            ? const Icon(Icons.check,
-                                size: 16, color: Colors.white)
-                            : Text('${index + 1}',
-                                style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  steps[index],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        index == 0 ? AppColors.primary : Colors.grey.shade500,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
       ),
     );
   }

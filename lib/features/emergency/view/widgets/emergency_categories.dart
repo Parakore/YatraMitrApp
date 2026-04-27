@@ -103,8 +103,9 @@ class _CategoryCard extends StatelessWidget {
         color: isSelected ? AppColors.primary : Colors.white,
         borderRadius: BorderRadius.circular(20),
         elevation: isSelected ? 8 : 1,
-        shadowColor:
-            isSelected ? AppColors.primary.withOpacity(0.4) : Colors.black12,
+        shadowColor: isSelected
+            ? AppColors.primary.withValues(alpha: 0.4)
+            : Colors.black12,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
@@ -123,7 +124,9 @@ class _CategoryCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.white.withOpacity(0.2) : bgColor,
+                    color: isSelected
+                        ? Colors.white.withValues(alpha: 0.2)
+                        : bgColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

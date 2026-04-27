@@ -20,7 +20,10 @@ class IncidentHistoryScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text(
           'Emergency Logs',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -66,7 +69,7 @@ class IncidentHistoryScreen extends ConsumerWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -89,20 +92,25 @@ class IncidentHistoryScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.05),
+          color: color.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.1)),
+          border: Border.all(color: color.withValues(alpha: 0.1)),
         ),
         child: Column(
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 9, color: Colors.grey[600], fontWeight: FontWeight.w900, letterSpacing: 0.5),
+              style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5),
             ),
             const SizedBox(height: 4),
             Text(
               value,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: color),
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.w900, color: color),
             ),
           ],
         ),
@@ -118,7 +126,7 @@ class IncidentHistoryScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -136,28 +144,43 @@ class IncidentHistoryScreen extends ConsumerWidget {
                   children: [
                     Text(
                       inc.id,
-                      style: TextStyle(color: Colors.grey[400], fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1),
+                      style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1),
                     ),
                     StatusPill(
                       label: inc.status,
-                      type: inc.status.toLowerCase() == 'resolved' ? StatusType.safe : StatusType.danger,
+                      type: inc.status.toLowerCase() == 'resolved'
+                          ? StatusType.safe
+                          : StatusType.danger,
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
                   inc.pilgrim,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: AppColors.secondary),
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.secondary),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   inc.type,
-                  style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                  style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5),
                 ),
                 const Divider(height: 32),
-                _buildInfoRow(Icons.location_on_outlined, 'Location', inc.location),
+                _buildInfoRow(
+                    Icons.location_on_outlined, 'Location', inc.location),
                 const SizedBox(height: 12),
-                _buildInfoRow(Icons.timer_outlined, 'Response', inc.responseTime),
+                _buildInfoRow(
+                    Icons.timer_outlined, 'Response', inc.responseTime),
                 const SizedBox(height: 12),
                 _buildInfoRow(Icons.shield_outlined, 'Agency', inc.agency),
               ],
@@ -167,16 +190,21 @@ class IncidentHistoryScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.grey[50],
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+              borderRadius:
+                  const BorderRadius.vertical(bottom: Radius.circular(24)),
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, size: 16, color: AppColors.textSecondary),
+                const Icon(Icons.info_outline,
+                    size: 16, color: AppColors.textSecondary),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Incident resolved by specialized response team. Pilgrim safely assisted at ${inc.location}.',
-                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.4),
+                    style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
+                        height: 1.4),
                   ),
                 ),
               ],
@@ -194,12 +222,18 @@ class IncidentHistoryScreen extends ConsumerWidget {
         const SizedBox(width: 12),
         Text(
           '$label:',
-          style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w600),
         ),
         const SizedBox(width: 8),
         Text(
           value,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.secondary),
+          style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              color: AppColors.secondary),
         ),
       ],
     );

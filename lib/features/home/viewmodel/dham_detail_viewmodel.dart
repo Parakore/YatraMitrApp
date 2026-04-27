@@ -114,16 +114,16 @@ class DhamDetailViewModel extends _$DhamDetailViewModel {
           ),
         ],
         advisories: [
-          const SafetyAdvisory(
+          SafetyAdvisory(
             title: '🔴 High Altitude Warning',
             message: 'Pilgrims with heart / lung issues must consult a doctor.',
           ),
-          const SafetyAdvisory(
+          SafetyAdvisory(
             title: '🌧️ Weather Conditions',
             message:
                 'The trek may be suspended during heavy rain or landslides.',
           ),
-          const SafetyAdvisory(
+          SafetyAdvisory(
             title: '⚠️ Fraud Awareness',
             message:
                 'Only book via official government websites.\nDo not pay middlemen for registration.',
