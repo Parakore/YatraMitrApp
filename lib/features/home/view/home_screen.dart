@@ -89,6 +89,19 @@ class HomeScreen extends ConsumerWidget {
                   color: AppColors.textPrimary),
             ),
           ),
+          const SizedBox(width: 12),
+          InkWell(
+            onTap: () => context.push(AppRouter.myRegistration),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.person_outline_rounded,
+                  color: AppColors.textPrimary),
+            ),
+          ),
         ],
       ),
     );

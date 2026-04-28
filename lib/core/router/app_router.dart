@@ -27,6 +27,7 @@ import '../../features/registration/view/yatra_registration_screen.dart';
 import '../../features/home/model/home_models.dart';
 import '../../features/maps/view/safety_vitals_screen.dart';
 import '../../features/maps/view/geo_fencing_screen.dart';
+import '../../features/registration/view/my_registration_screen.dart';
 
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
@@ -51,6 +52,7 @@ class AppRouter {
   static const String grievance = '/grievance';
   static const String grievanceDetail = '/grievance-detail';
   static const String registration = '/registration';
+  static const String myRegistration = '/my-registration';
   static const String yatraPlanner = '/yatra-planner';
   static const String safetyVitals = '/safety-vitals';
   static const String geoFencing = '/geo-fencing';
@@ -160,6 +162,10 @@ class AppRouter {
       GoRoute(
         path: registration,
         builder: (context, state) => const YatraRegistrationScreen(),
+      ),
+      GoRoute(
+        path: myRegistration,
+        builder: (context, state) => const MyRegistrationScreen(),
       ),
       GoRoute(
         path: yatraPlanner,
