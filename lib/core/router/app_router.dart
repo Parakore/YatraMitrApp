@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yatramitra/core/theme/app_colors.dart';
 import 'package:yatramitra/features/disaster/view/disaster_screen.dart';
+import 'package:yatramitra/features/home/view/essential_detail_screen.dart';
+import 'package:yatramitra/features/yatra_planner/view/yatra_planner_screen.dart';
 import '../../features/ai_assistant/view/ai_chat_screen.dart';
 import '../../features/emergency/view/emergency_screen.dart';
 import '../../features/emergency/view/incident_history_screen.dart';
@@ -22,9 +24,9 @@ import '../../features/grievance/view/grievance_screen.dart';
 import '../../features/grievance/view/grievance_detail_screen.dart';
 import '../../features/grievance/model/grievance_model.dart';
 import '../../features/registration/view/yatra_registration_screen.dart';
-import '../../features/yatra_planner/view/yatra_planner_screen.dart';
-import '../../features/home/view/essential_detail_screen.dart';
 import '../../features/home/model/home_models.dart';
+import '../../features/maps/view/safety_vitals_screen.dart';
+import '../../features/maps/view/geo_fencing_screen.dart';
 
 /// Centralized router configuration for YatraMitra.
 /// Mandatory: Use GoRouter ONLY.
@@ -50,6 +52,8 @@ class AppRouter {
   static const String grievanceDetail = '/grievance-detail';
   static const String registration = '/registration';
   static const String yatraPlanner = '/yatra-planner';
+  static const String safetyVitals = '/safety-vitals';
+  static const String geoFencing = '/geo-fencing';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -160,6 +164,14 @@ class AppRouter {
       GoRoute(
         path: yatraPlanner,
         builder: (context, state) => const YatraPlannerScreen(),
+      ),
+      GoRoute(
+        path: safetyVitals,
+        builder: (context, state) => const SafetyVitalsScreen(),
+      ),
+      GoRoute(
+        path: geoFencing,
+        builder: (context, state) => const GeoFencingScreen(),
       ),
     ],
   );
