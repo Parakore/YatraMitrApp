@@ -50,7 +50,9 @@ class HomeViewModel extends _$HomeViewModel {
   FutureOr<HomeState> build() async {
     // Request notification permissions on startup
     // We don't await this as we don't want to block the UI loading
-    ref.read(permissionServiceProvider.notifier).requestNotificationPermission();
+    ref
+        .read(permissionServiceProvider.notifier)
+        .requestNotificationPermission();
 
     // Simulated initial data fetch
     // In a real app, this would come from a repository
@@ -106,9 +108,9 @@ class HomeViewModel extends _$HomeViewModel {
         QuickAction(
           title: 'Register/\nStatus',
           iconPath: 'assets/images/icons/register_status.png',
-          route: '/coming-soon',
+          route: '/registration',
           color: AppColors.primary,
-          isFuture: true,
+          isFuture: false,
         ),
         QuickAction(
           title: 'Helicopter\nBooking',
