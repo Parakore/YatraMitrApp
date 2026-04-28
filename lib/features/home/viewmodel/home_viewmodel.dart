@@ -156,9 +156,8 @@ class HomeViewModel extends _$HomeViewModel {
         QuickAction(
           title: 'AI Yatra\nPlanner',
           iconPath: 'assets/images/icons/yatra_guidelines.png', // Placeholder
-          route: '/coming-soon',
+          route: AppRouter.yatraPlanner,
           color: AppColors.gold,
-          isFuture: true,
         ),
       ],
       travelEssentials: const [

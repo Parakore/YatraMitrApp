@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/yatra_planner/model/yatra_plan.dart';
 
 /// Service for handling local Hive database operations.
 /// Supports structured data caching for offline-first functionality.
@@ -7,8 +8,10 @@ class HiveService {
   /// Initialize Hive
   static Future<void> init() async {
     await Hive.initFlutter();
-    // Register adapters here in the future
-    // Hive.registerAdapter(PlaceAdapter());
+
+    // Register Adapters
+    Hive.registerAdapter(YatraPlanAdapter());
+    Hive.registerAdapter(YatraDayPlanAdapter());
   }
 
   /// Open a box
@@ -28,12 +31,12 @@ class HiveService {
     final data = box.get(key);
     if (data == null) return null;
     if (data is T) return data;
-    
+
     // Handle List casting specifically for Hive
     if (T.toString().startsWith('List') && data is List) {
       return data as T;
     }
-    
+
     return null;
   }
 

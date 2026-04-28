@@ -22,6 +22,7 @@ import '../../features/grievance/view/grievance_screen.dart';
 import '../../features/grievance/view/grievance_detail_screen.dart';
 import '../../features/grievance/model/grievance_model.dart';
 import '../../features/registration/view/yatra_registration_screen.dart';
+import '../../features/yatra_planner/view/yatra_planner_screen.dart';
 import '../../features/home/view/essential_detail_screen.dart';
 import '../../features/home/model/home_models.dart';
 
@@ -48,6 +49,7 @@ class AppRouter {
   static const String grievance = '/grievance';
   static const String grievanceDetail = '/grievance-detail';
   static const String registration = '/registration';
+  static const String yatraPlanner = '/yatra-planner';
 
   static final GoRouter router = GoRouter(
     initialLocation: home,
@@ -154,6 +156,10 @@ class AppRouter {
       GoRoute(
         path: registration,
         builder: (context, state) => const YatraRegistrationScreen(),
+      ),
+      GoRoute(
+        path: yatraPlanner,
+        builder: (context, state) => const YatraPlannerScreen(),
       ),
     ],
   );

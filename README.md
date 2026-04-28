@@ -34,6 +34,7 @@ Detailed info can be found in [ARCHITECTURE.md](file:///d:/Flutter%20Projects/Cl
 - 🆘 **Emergency SOS**: Accessibility-first SOS with rescue workflow management.
 - 🤖 **AI Assistant**: Offline-first conversational companion for pilgrim safety.
 - 🗺️ **Offline Navigation**: Optimized routes with local caching for low-network zones.
+- 🤖 **AI Yatra Planner**: Comprehensive, preference-based itinerary generation with crowd and weather optimization.
 - 🌦️ **Weather Forecast**: Accurate updates with AI safety advisories.
 
 ## 🛠️ Tech Stack
