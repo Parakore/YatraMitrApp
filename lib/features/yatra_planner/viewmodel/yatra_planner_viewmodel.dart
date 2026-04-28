@@ -6,17 +6,21 @@ import 'package:uuid/uuid.dart';
 
 part 'yatra_planner_viewmodel.g.dart';
 
+enum PlannerView { dashboard, preferences, generating, itinerary }
+
 /// State class for the Yatra Planner.
 class YatraPlannerState {
   final List<YatraPlan> plans;
   final bool isGenerating;
   final int workflowStep; // 0 to 6
+  final PlannerView view;
   final String? error;
 
   YatraPlannerState({
     required this.plans,
     this.isGenerating = false,
     this.workflowStep = 0,
+    this.view = PlannerView.preferences,
     this.error,
   });
 
@@ -24,25 +28,36 @@ class YatraPlannerState {
     List<YatraPlan>? plans,
     bool? isGenerating,
     int? workflowStep,
+    PlannerView? view,
     String? error,
   }) {
     return YatraPlannerState(
       plans: plans ?? this.plans,
       isGenerating: isGenerating ?? this.isGenerating,
       workflowStep: workflowStep ?? this.workflowStep,
+      view: view ?? this.view,
       error: error ?? this.error,
     );
   }
 }
 
-/// ViewModel for managing high-fidelity Yatra plans.
+/// ViewModel for managing high-fidelity Yatra plans with multi-view support.
 @riverpod
 class YatraPlannerViewModel extends _$YatraPlannerViewModel {
   @override
   FutureOr<YatraPlannerState> build() async {
     final repository = ref.watch(yatraPlannerRepositoryProvider);
     final plans = await repository.getPlans();
-    return YatraPlannerState(plans: plans);
+    
+    return YatraPlannerState(
+      plans: plans,
+      view: PlannerView.dashboard,
+    );
+  }
+
+  /// Switches the current view.
+  void setView(PlannerView view) {
+    state = AsyncData(state.value!.copyWith(view: view));
   }
 
   /// Generates an AI itinerary following the 6-step workflow.
@@ -58,7 +73,11 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
     required String budgetRange,
     String? specialNeeds,
   }) async {
-    state = AsyncData(state.value!.copyWith(isGenerating: true, workflowStep: 1));
+    state = AsyncData(state.value!.copyWith(
+      isGenerating: true, 
+      workflowStep: 1,
+      view: PlannerView.generating,
+    ));
     
     try {
       // Simulate the 6-step workflow with delays
@@ -82,6 +101,7 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
         budgetRange: budgetRange,
         specialNeeds: specialNeeds,
         createdAt: DateTime.now(),
+        status: 'Generated',
       );
 
       final itinerary = ItineraryGenerator.generate(basePlan);
@@ -90,9 +110,19 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
       await repository.savePlan(finalPlan);
       
       final updatedPlans = await repository.getPlans();
-      state = AsyncData(YatraPlannerState(plans: updatedPlans, isGenerating: false, workflowStep: 0));
+      state = AsyncData(YatraPlannerState(
+        plans: updatedPlans, 
+        isGenerating: false, 
+        workflowStep: 0,
+        view: PlannerView.dashboard,
+      ));
     } catch (e) {
-      state = AsyncData(state.value!.copyWith(isGenerating: false, workflowStep: 0, error: e.toString()));
+      state = AsyncData(state.value!.copyWith(
+        isGenerating: false, 
+        workflowStep: 0, 
+        error: e.toString(),
+        view: PlannerView.preferences,
+      ));
     }
   }
 
@@ -103,7 +133,10 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
       await repository.deletePlan(id);
       
       final updatedPlans = await repository.getPlans();
-      state = AsyncData(YatraPlannerState(plans: updatedPlans));
+      state = AsyncData(YatraPlannerState(
+        plans: updatedPlans,
+        view: updatedPlans.isNotEmpty ? PlannerView.dashboard : PlannerView.preferences,
+      ));
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
     }

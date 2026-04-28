@@ -7,9 +7,9 @@ part of 'yatra_planner_viewmodel.dart';
 // **************************************************************************
 
 String _$yatraPlannerViewModelHash() =>
-    r'7b3e559cbd184be6ad6eee35fc8d0d7dc9157567';
+    r'91eed70df6625d74e98cb80a95cbcf2f93ae3a48';
 
-/// ViewModel for managing Yatra plans.
+/// ViewModel for managing high-fidelity Yatra plans with multi-view support.
 ///
 /// Copied from [YatraPlannerViewModel].
 @ProviderFor(YatraPlannerViewModel)
