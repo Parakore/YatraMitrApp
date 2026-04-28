@@ -163,8 +163,10 @@ class _TransportInfo extends StatelessWidget {
       children: [
         const Icon(Icons.directions_bus_rounded, size: 14, color: Colors.grey),
         const SizedBox(width: 4),
-        Text('${day.distance} • ${day.transport}',
-            style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        Expanded(
+          child: Text('${day.distance} • ${day.transport}',
+              style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        ),
       ],
     );
   }
@@ -193,13 +195,15 @@ class _DetailRow extends StatelessWidget {
           const SizedBox(width: 12),
           Text('$label:',
               style: const TextStyle(fontSize: 13, color: Colors.grey)),
-          const SizedBox(width: 8),
-          Text(value,
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color:
-                      isHighlight ? AppColors.saffron : AppColors.textPrimary)),
+          Expanded(
+            child: Text(value,
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: isHighlight
+                        ? AppColors.saffron
+                        : AppColors.textPrimary)),
+          ),
         ],
       ),
     );
