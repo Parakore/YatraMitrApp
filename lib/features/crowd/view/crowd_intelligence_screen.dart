@@ -4,6 +4,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/status_pill.dart';
 import '../viewmodel/crowd_viewmodel.dart';
 import '../model/crowd_status.dart';
+import '../../../shared/widgets/yatra_app_bar.dart';
+import '../../../shared/widgets/yatra_section_header.dart';
 
 class CrowdIntelligenceScreen extends ConsumerWidget {
   const CrowdIntelligenceScreen({super.key});
@@ -14,53 +16,15 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Crowd Intelligence',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            fontSize: 18,
-            letterSpacing: 1.2,
-          ),
-        ),
+      appBar: YatraAppBar(
+        title: 'Crowd Intelligence',
         actions: [
           IconButton(
             onPressed: () =>
                 ref.read(crowdViewModelProvider.notifier).refresh(),
             icon: const Icon(Icons.refresh_rounded, color: Colors.white),
           ),
-          const SizedBox(width: 8),
         ],
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF0D1B2A),
-                Color(0xFF1A3A6B),
-              ],
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(height: 4, color: AppColors.saffron),
-              ),
-            ],
-          ),
-        ),
       ),
       body: crowdState.when(
         data: (data) => SingleChildScrollView(
@@ -87,7 +51,7 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
           const SizedBox(height: 32),
           _buildHeatmap(context),
           const SizedBox(height: 32),
-          _buildSectionHeader('Live Location Monitoring'),
+          const YatraSectionHeader(title: 'Live Location Monitoring'),
           const SizedBox(height: 16),
           ...data.map((status) => _buildLocationCard(status)),
           const SizedBox(height: 40),
@@ -96,30 +60,6 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Row(
-      children: [
-        Container(
-          width: 4,
-          height: 20,
-          decoration: BoxDecoration(
-            color: AppColors.saffron,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          title.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.1,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildKpiGrid(int count, int capacity, double density) {
     return GridView.count(
@@ -225,7 +165,12 @@ class CrowdIntelligenceScreen extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildSectionHeader('Route Density Map'),
+            const Expanded(
+              child: YatraSectionHeader(
+                title: 'Route Density Map',
+                padding: EdgeInsets.zero,
+              ),
+            ),
             StatusPill(
               label: 'LIVE FEED',
               type: StatusType.danger,

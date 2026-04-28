@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/widgets/error_widget.dart';
+import '../../../shared/widgets/yatra_app_bar.dart';
+import '../../../shared/widgets/yatra_section_header.dart';
+import '../../../shared/widgets/yatra_info_card.dart';
 import '../viewmodel/disaster_viewmodel.dart';
 import '../model/disaster_models.dart';
 import 'widgets/weather_summary_card.dart';
-import 'widgets/ai_recommendation_block.dart';
 import 'widgets/forecast_table.dart';
 import 'widgets/risk_zones_grid.dart';
 import 'widgets/route_closures_list.dart';
@@ -19,41 +21,8 @@ class DisasterScreen extends ConsumerWidget {
     final summaryState = ref.watch(disasterIntelligenceViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Disaster Intelligence',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.5,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(height: 4, color: AppColors.saffron),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
+      appBar: const YatraAppBar(
+        title: 'Disaster Intelligence',
       ),
       body: RefreshIndicator(
         onRefresh: () =>
@@ -86,33 +55,6 @@ class DisasterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
-      child: Row(
-        children: [
-          Container(
-            width: 4,
-            height: 24,
-            decoration: BoxDecoration(
-              color: AppColors.saffron,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -0.5,
-              color: AppColors.textPrimary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildContent(BuildContext context, WidgetRef ref,
       DisasterIntelligenceSummary summary) {
@@ -125,27 +67,30 @@ class DisasterScreen extends ConsumerWidget {
           // 1. Weather Summary & Route Overview
           WeatherSummaryCard(summary: summary),
 
-          _buildSectionHeader('AI Safety Recommendation'),
+          YatraInfoCard(
+            title: '🤖 Safety Recommendation',
+            content: 'AI Safety Analysis',
+            icon: Icons.psychology_rounded,
+            severity: 'Medium',
+            bulletPoints: summary.aiRecommendations,
+          ),
 
-          // 2. AI Recommendation Block
-          AiRecommendationBlock(recommendations: summary.aiRecommendations),
-
-          _buildSectionHeader('Active Safety Alerts'),
+          const YatraSectionHeader(title: 'Active Safety Alerts'),
 
           // 3. Active Alerts
           _buildAlertsList(summary.activeAlerts),
 
-          _buildSectionHeader('5-Day Safety Forecast'),
+          const YatraSectionHeader(title: '5-Day Safety Forecast'),
 
           // 4. Forecast Table
           ForecastTable(forecasts: summary.fiveDayForecast),
 
-          _buildSectionHeader('Landslide Risk Zones'),
+          const YatraSectionHeader(title: 'Landslide Risk Zones'),
 
           // 5. Landslide Risk Zones
           RiskZonesGrid(zones: summary.landslideZones),
 
-          _buildSectionHeader('Route Status & Closures'),
+          const YatraSectionHeader(title: 'Route Status & Closures'),
 
           // 6. Route Closures
           RouteClosuresList(closures: summary.routeClosures),

@@ -5,6 +5,8 @@ import '../viewmodel/nearby_viewmodel.dart';
 import 'widgets/nearby_header.dart';
 import 'widgets/category_selector.dart';
 import 'widgets/facility_card.dart';
+import '../../../shared/widgets/yatra_app_bar.dart';
+import '../../../shared/widgets/yatra_section_header.dart';
 
 /// Redesigned Facilities Locator Screen aligned with Global Design Standards.
 /// Provides a premium, high-contrast UI for finding nearby services.
@@ -32,37 +34,8 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'Facilities Locator',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.2,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(height: 4, color: AppColors.saffron),
-              ),
-            ],
-          ),
-        ),
+      appBar: const YatraAppBar(
+        title: 'Facilities Locator',
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -86,7 +59,10 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
               },
             ),
 
-            _buildSectionHeader('Service Categories'),
+            const YatraSectionHeader(
+              title: 'Service Categories',
+              onActionPressed: null, // Placeholder for "See All" functionality if needed
+            ),
 
             // Modern Category Chips
             CategorySelector(
@@ -147,32 +123,6 @@ class _NearbyScreenState extends ConsumerState<NearbyScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1B263B),
-            ),
-          ),
-          Text(
-            'See All',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildEmptyState() {
     return Center(

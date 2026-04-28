@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'dart:async';
 
 import 'package:yatramitra/core/theme/app_colors.dart';
+import 'package:yatramitra/shared/widgets/yatra_app_bar.dart';
+import 'package:yatramitra/shared/widgets/yatra_section_header.dart';
 import 'package:yatramitra/features/emergency/viewmodel/emergency_viewmodel.dart';
 import 'package:yatramitra/features/emergency/view/widgets/sos_hero_section.dart';
 import 'package:yatramitra/features/emergency/view/widgets/workflow_tracker.dart';
@@ -62,33 +64,7 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
     super.dispose();
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-      child: Row(
-        children: [
-          Container(
-            width: 4,
-            height: 20,
-            decoration: BoxDecoration(
-              color: AppColors.saffron,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            title.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w900,
-              color: AppColors.secondary,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,41 +72,8 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.surface),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'SOS Emergency',
-          style: TextStyle(
-            color: AppColors.surface,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.5,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(height: 4, color: AppColors.saffron),
-              ),
-            ],
-          ),
-        ),
+      appBar: YatraAppBar(
+        title: 'SOS Emergency',
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline, color: Colors.white70),
@@ -152,17 +95,17 @@ class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
                     onCancel: () =>
                         ref.read(emergencyProvider.notifier).cancelSos(),
                   ),
-                  _buildSectionHeader('Emergency Context'),
+                  const YatraSectionHeader(title: 'Emergency Context'),
                   EmergencyCategories(
                     selectedCategory: emergencyState.selectedCategory,
                     onCategorySelected: (cat) =>
                         ref.read(emergencyProvider.notifier).setCategory(cat),
                   ),
-                  _buildSectionHeader('Rescue Workflow'),
+                  const YatraSectionHeader(title: 'Rescue Workflow'),
                   WorkflowTracker(steps: emergencyState.workflowSteps),
-                  _buildSectionHeader('Tactical Hotlines'),
+                  const YatraSectionHeader(title: 'Tactical Hotlines'),
                   TacticalHotlines(contacts: emergencyState.emergencyContacts),
-                  _buildSectionHeader('Incident Log History'),
+                  const YatraSectionHeader(title: 'Incident Log History'),
                   RecentIncidentsList(
                     incidents: emergencyState.recentIncidents,
                     onViewAll: () => context.push('/emergency/history'),

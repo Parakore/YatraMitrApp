@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:yatramitra/core/router/app_router.dart';
 import 'package:yatramitra/features/home/model/home_models.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/yatra_section_header.dart';
+import '../../../shared/widgets/yatra_info_card.dart';
 import '../viewmodel/dham_detail_viewmodel.dart';
 import '../viewmodel/home_viewmodel.dart';
 import '../model/dham_detail_model.dart';
@@ -61,12 +63,22 @@ class DhamDetailScreen extends ConsumerWidget {
                 _buildAIAssistant(context),
                 const SizedBox(height: 32),
 
-                _buildSectionHeader('Other Facilities',
-                    onSeeAll: () => context.push(AppRouter.quickActions)),
+                YatraSectionHeader(
+                  title: 'Other Facilities',
+                  onActionPressed: () => context.push(AppRouter.quickActions),
+                ),
                 _buildQuickActions(context, quickActions),
 
                 const SizedBox(height: 32),
-                _buildSafetyAdvisory(dham),
+                YatraInfoCard(
+                  title: 'Safety & Advisory',
+                  content: 'Important notices for your journey',
+                  icon: Icons.warning_amber_rounded,
+                  severity: 'High',
+                  bulletPoints: dham.advisories
+                      .map((a) => '${a.title}: ${a.message}')
+                      .toList(),
+                ),
                 const SizedBox(height: 32),
               ],
             ),
@@ -727,30 +739,6 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title, {VoidCallback? onSeeAll}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w900,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        if (onSeeAll != null)
-          TextButton(
-            onPressed: onSeeAll,
-            child: const Text(
-              'View all',
-              style: TextStyle(
-                  color: AppColors.textSecondary, fontWeight: FontWeight.bold),
-            ),
-          ),
-      ],
-    );
-  }
 
   Widget _buildQuickActions(BuildContext context, List<QuickAction> actions) {
     return SizedBox(
@@ -800,76 +788,6 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSafetyAdvisory(DhamDetailModel dham) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF5F5),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.error.withValues(alpha: 0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.warning_amber_rounded,
-                color: AppColors.error, size: 32),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Safety & Advisory',
-            style: TextStyle(
-              color: AppColors.error,
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 24),
-          ...dham.advisories.map((a) => Padding(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: Column(
-                  children: [
-                    Text(
-                      a.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      a.message,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 13,
-                        height: 1.5,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        ],
-      ),
-    );
-  }
 
   Widget _buildBottomActions(BuildContext context) {
     return Container(

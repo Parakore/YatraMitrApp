@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/yatra_app_bar.dart';
+import '../../../shared/widgets/yatra_section_header.dart';
 import '../viewmodel/grievance_viewmodel.dart';
 import '../model/grievance_model.dart';
 import '../../../core/router/app_router.dart';
@@ -134,13 +136,15 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
+      appBar: const YatraAppBar(
+        title: 'Grievance Redressal',
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildQuickStats(state.grievances),
-            _buildSectionHeader('FILE NEW COMPLAINT'),
+            const YatraSectionHeader(title: 'FILE NEW COMPLAINT'),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -156,7 +160,7 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            _buildSectionHeader('MY COMPLAINTS'),
+            const YatraSectionHeader(title: 'MY COMPLAINTS'),
             _buildMyComplaintsList(state.grievances),
             const SizedBox(height: 40),
           ],
@@ -165,71 +169,6 @@ class _GrievanceScreenState extends ConsumerState<GrievanceScreen> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      elevation: 0,
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: const Text(
-        'Grievance Redressal',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 1.2,
-        ),
-      ),
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF0D1B2A), Color(0xFF1A3A6B)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(height: 4, color: AppColors.saffron),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-      child: Row(
-        children: [
-          Container(
-            width: 4,
-            height: 18,
-            decoration: BoxDecoration(
-              color: AppColors.saffron,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-              color: AppColors.textPrimary,
-              letterSpacing: 1.1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildQuickStats(List<Grievance> grievances) {
     final openCount =

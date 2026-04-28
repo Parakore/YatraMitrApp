@@ -16,6 +16,15 @@ lib/
         ├── viewmodel/  # Business logic (Riverpod)
         └── view/       # UI components
 
+## 🎨 Shared Design System
+
+To ensure UI consistency and reduce code duplication, standardized custom widgets are maintained in `lib/shared/widgets/`:
+
+1.  **YatraAppBar**: Premium gradient AppBar with signature saffron accent and standardized typography.
+2.  **YatraSectionHeader**: Consistent header style with vertical indicators and optional trailing actions.
+3.  **YatraInfoCard**: Multi-severity (Error/Warning/Success) alert and information display component.
+4.  **StatusPill**: Standardized status indicator for various entity states.
+
 ## 🧠 Smart Intelligence Modules
 
 1. **Crowd & Traffic**: Real-time density monitoring and wait-time prediction using heuristic models.
