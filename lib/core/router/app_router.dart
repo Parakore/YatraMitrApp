@@ -17,7 +17,6 @@ import '../../features/home/view/quick_actions_screen.dart';
 import '../../features/home/view/travel_essentials_screen.dart';
 import '../../shared/widgets/error_widget.dart';
 import '../../shared/widgets/future_feature_screen.dart';
-
 import '../../features/weather/view/weather_screen.dart';
 import '../../features/maps/view/navigation_maps_screen.dart';
 import '../../features/grievance/view/grievance_screen.dart';

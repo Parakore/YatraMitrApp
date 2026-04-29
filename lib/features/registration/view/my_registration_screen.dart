@@ -24,7 +24,6 @@ class MyRegistrationScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.download_rounded, color: Colors.white),
             onPressed: () {
-              // TODO: Implement E-Pass download
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Downloading E-Pass...')),
               );
@@ -147,7 +146,8 @@ class MyRegistrationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileDetailRow(String label, String value, {Color? valueColor}) {
+  Widget _buildProfileDetailRow(String label, String value,
+      {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -316,9 +316,11 @@ class MyRegistrationScreen extends ConsumerWidget {
               final isWarning = vital.startsWith('!');
               final cleanVital = isWarning ? vital.substring(2) : vital;
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: (isWarning ? Colors.orange : Colors.green).withValues(alpha: 0.1),
+                  color: (isWarning ? Colors.orange : Colors.green)
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -355,7 +357,8 @@ class MyRegistrationScreen extends ConsumerWidget {
               children: [
                 const Row(
                   children: [
-                    Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 16),
+                    Icon(Icons.info_outline_rounded,
+                        color: AppColors.primary, size: 16),
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -372,11 +375,13 @@ class MyRegistrationScreen extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   'Issued by: ${health.issuedBy}',
-                  style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                  style: const TextStyle(
+                      fontSize: 10, color: AppColors.textSecondary),
                 ),
                 Text(
                   'Certificate ID: ${health.certificateId}',
-                  style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                  style: const TextStyle(
+                      fontSize: 10, color: AppColors.textSecondary),
                 ),
               ],
             ),

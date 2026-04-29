@@ -5,6 +5,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../viewmodel/home_viewmodel.dart';
 import '../model/home_models.dart';
+import '../../registration/viewmodel/registration_viewmodel.dart';
 
 /// Redesigned Home Screen following the production layout.
 /// Adheres to MVVM architecture and high-contrast, elder-friendly design.
@@ -21,7 +22,7 @@ class HomeScreen extends ConsumerWidget {
         data: (state) => SafeArea(
           child: Column(
             children: [
-              _buildTopBar(context, state.currentLocation),
+              _buildTopBar(context, ref, state.currentLocation),
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.only(
@@ -61,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTopBar(BuildContext context, String location) {
+  Widget _buildTopBar(BuildContext context, WidgetRef ref, String location) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -91,7 +92,17 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
           InkWell(
-            onTap: () => context.push(AppRouter.myRegistration),
+            onTap: () async {
+              final repository = ref.read(registrationRepositoryProvider);
+              final isRegistered = await repository.isRegistered();
+              if (context.mounted) {
+                if (isRegistered) {
+                  context.push(AppRouter.myRegistration);
+                } else {
+                  context.push(AppRouter.registration);
+                }
+              }
+            },
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(

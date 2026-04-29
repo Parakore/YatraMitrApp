@@ -9,6 +9,7 @@ import '../../../shared/widgets/yatra_info_card.dart';
 import '../viewmodel/dham_detail_viewmodel.dart';
 import '../viewmodel/home_viewmodel.dart';
 import '../model/dham_detail_model.dart';
+import '../../registration/viewmodel/registration_viewmodel.dart';
 
 class DhamDetailScreen extends ConsumerWidget {
   final String dhamId;
@@ -27,16 +28,17 @@ class DhamDetailScreen extends ConsumerWidget {
           context,
           dham,
           homeStateAsync.value?.quickActions ?? [],
+          ref,
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
       ),
-      bottomNavigationBar: _buildBottomActions(context),
+      bottomNavigationBar: _buildBottomActions(context, ref),
     );
   }
 
   Widget _buildContent(BuildContext context, DhamDetailModel dham,
-      List<QuickAction> quickActions) {
+      List<QuickAction> quickActions, WidgetRef ref) {
     return CustomScrollView(
       slivers: [
         _buildSliverAppBar(context, dham),
@@ -52,7 +54,7 @@ class DhamDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 _buildWeatherAndCrowd(dham),
                 const SizedBox(height: 32),
-                _buildActionSection(context),
+                _buildActionSection(context, ref),
                 const SizedBox(height: 32),
                 _buildTransportSection(dham),
                 // const SizedBox(height: 32),
@@ -328,7 +330,9 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionSection(BuildContext context) {
+  Widget _buildActionSection(BuildContext context, WidgetRef ref) {
+    final isRegistered = ref.watch(isUserRegisteredProvider).value ?? false;
+
     return Column(
       children: [
         SizedBox(
@@ -357,18 +361,20 @@ class DhamDetailScreen extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        TextButton(
-          onPressed: () => context.push(AppRouter.myRegistration),
-          child: const Text(
-            'Already Registered? View Details',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
+        if (isRegistered) ...[
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () => context.push(AppRouter.myRegistration),
+            child: const Text(
+              'Already Registered? View Details',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -805,7 +811,9 @@ class DhamDetailScreen extends ConsumerWidget {
   }
 
 
-  Widget _buildBottomActions(BuildContext context) {
+  Widget _buildBottomActions(BuildContext context, WidgetRef ref) {
+    final isRegistered = ref.watch(isUserRegisteredProvider).value ?? false;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       decoration: BoxDecoration(
@@ -858,7 +866,8 @@ class DhamDetailScreen extends ConsumerWidget {
           Expanded(
             flex: 3,
             child: ElevatedButton(
-              onPressed: () => context.push(AppRouter.registration),
+              onPressed: () => context.push(
+                  isRegistered ? AppRouter.myRegistration : AppRouter.registration),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -868,9 +877,9 @@ class DhamDetailScreen extends ConsumerWidget {
                 elevation: 4,
                 shadowColor: AppColors.primary.withValues(alpha: 0.4),
               ),
-              child: const Text(
-                'Register Now',
-                style: TextStyle(
+              child: Text(
+                isRegistered ? 'View Registration' : 'Register Now',
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,

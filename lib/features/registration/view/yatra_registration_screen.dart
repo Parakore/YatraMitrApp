@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yatramitra/core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../model/app_user.dart';
+import '../viewmodel/registration_viewmodel.dart';
 
 /// Premium Multi-step Yatra Registration Screen.
+/// Updated to capture user data and store it locally in Hive via RegistrationViewModel.
 class YatraRegistrationScreen extends ConsumerStatefulWidget {
   const YatraRegistrationScreen({super.key});
 
@@ -16,6 +19,35 @@ class YatraRegistrationScreen extends ConsumerStatefulWidget {
 class _YatraRegistrationScreenState
     extends ConsumerState<YatraRegistrationScreen> {
   int _currentStep = 0;
+
+  // Controllers for personal info
+  final _nameController = TextEditingController();
+  final _idController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _phoneController = TextEditingController();
+
+  // Controllers for health info (simplified for now)
+  final _allergiesController = TextEditingController();
+  final _medsController = TextEditingController();
+
+  // Controllers for emergency contacts
+  final _kinNameController = TextEditingController();
+  final _kinRelationController = TextEditingController();
+  final _kinPhoneController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _idController.dispose();
+    _ageController.dispose();
+    _phoneController.dispose();
+    _allergiesController.dispose();
+    _medsController.dispose();
+    _kinNameController.dispose();
+    _kinRelationController.dispose();
+    _kinPhoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,12 +152,16 @@ class _YatraRegistrationScreenState
       children: [
         _buildSectionTitle('Personal Information'),
         const SizedBox(height: 24),
-        _buildTextField('Full Name', Icons.person_outline, 'e.g. Rajesh Kumar'),
+        _buildTextField('Full Name', Icons.person_outline, 'e.g. Rajesh Kumar',
+            controller: _nameController),
         _buildTextField(
-            'Aadhar / ID Number', Icons.badge_outlined, '12-digit number'),
-        _buildTextField('Age', Icons.cake_outlined, 'e.g. 45'),
+            'Aadhar / ID Number', Icons.badge_outlined, '12-digit number',
+            controller: _idController),
+        _buildTextField('Age', Icons.cake_outlined, 'e.g. 45',
+            controller: _ageController, keyboardType: TextInputType.number),
         _buildTextField(
-            'Phone Number', Icons.phone_outlined, '+91-XXXXX XXXXX'),
+            'Phone Number', Icons.phone_outlined, '+91-XXXXX XXXXX',
+            controller: _phoneController, keyboardType: TextInputType.phone),
       ],
     );
   }
@@ -139,9 +175,11 @@ class _YatraRegistrationScreenState
         _buildSelectionCard('Do you have any heart conditions?', ['Yes', 'No']),
         _buildSelectionCard('Respiratory issues / Asthma?', ['Yes', 'No']),
         _buildTextField('Allergies (if any)', Icons.medical_services_outlined,
-            'e.g. Penicillin'),
+            'e.g. Penicillin',
+            controller: _allergiesController),
         _buildTextField('Current Medications', Icons.medication_outlined,
-            'List any medications'),
+            'List any medications',
+            controller: _medsController),
       ],
     );
   }
@@ -153,11 +191,13 @@ class _YatraRegistrationScreenState
         _buildSectionTitle('Emergency Contacts'),
         const SizedBox(height: 24),
         _buildTextField(
-            'Kin Name', Icons.family_restroom_outlined, 'Primary contact name'),
+            'Kin Name', Icons.family_restroom_outlined, 'Primary contact name',
+            controller: _kinNameController),
+        _buildTextField('Kin Relation', Icons.link_outlined, 'e.g. Spouse, Son',
+            controller: _kinRelationController),
         _buildTextField(
-            'Kin Relation', Icons.link_outlined, 'e.g. Spouse, Son'),
-        _buildTextField(
-            'Kin Phone', Icons.phone_android_outlined, 'Primary contact phone'),
+            'Kin Phone', Icons.phone_android_outlined, 'Primary contact phone',
+            controller: _kinPhoneController, keyboardType: TextInputType.phone),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -206,7 +246,8 @@ class _YatraRegistrationScreenState
     );
   }
 
-  Widget _buildTextField(String label, IconData icon, String hint) {
+  Widget _buildTextField(String label, IconData icon, String hint,
+      {TextEditingController? controller, TextInputType? keyboardType}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -230,6 +271,8 @@ class _YatraRegistrationScreenState
               ],
             ),
             child: TextField(
+              controller: controller,
+              keyboardType: keyboardType,
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: TextStyle(color: Colors.grey[300], fontSize: 14),
@@ -321,7 +364,7 @@ class _YatraRegistrationScreenState
                 if (_currentStep < 2) {
                   setState(() => _currentStep++);
                 } else {
-                  _showSuccessDialog();
+                  _handleRegistration();
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -344,9 +387,32 @@ class _YatraRegistrationScreenState
     );
   }
 
+  void _handleRegistration() {
+    // Validate basic info
+    if (_nameController.text.isEmpty || _phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all required fields')),
+      );
+      return;
+    }
+
+    final user = AppUser(
+      name: _nameController.text,
+      phone: _phoneController.text,
+      age: _ageController.text,
+      idNumber: _idController.text,
+      emergencyContactName: _kinNameController.text,
+      emergencyContactPhone: _kinPhoneController.text,
+    );
+
+    ref.read(registrationViewModelProvider.notifier).register(user);
+    _showSuccessDialog();
+  }
+
   void _showSuccessDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         content: Column(
@@ -361,10 +427,10 @@ class _YatraRegistrationScreenState
                     fontWeight: FontWeight.w900,
                     color: AppColors.secondary)),
             const SizedBox(height: 12),
-            const Text(
-              'Your Yatra registration for Kedarnath has been confirmed. A digital ID has been generated in your profile.',
+            Text(
+              'Welcome, ${_nameController.text}! Your Yatra registration has been confirmed and stored locally.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey, fontSize: 13, height: 1.5),
+              style: const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5),
             ),
             const SizedBox(height: 32),
             SizedBox(

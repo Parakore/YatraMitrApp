@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/yatra_planner/model/yatra_plan.dart';
+import '../../features/registration/model/app_user.dart';
 
 /// Service for handling local Hive database operations.
 /// Supports structured data caching for offline-first functionality.
@@ -12,6 +13,7 @@ class HiveService {
     // Register Adapters
     Hive.registerAdapter(YatraPlanAdapter());
     Hive.registerAdapter(YatraDayPlanAdapter());
+    Hive.registerAdapter(AppUserAdapter());
   }
 
   /// Open a box

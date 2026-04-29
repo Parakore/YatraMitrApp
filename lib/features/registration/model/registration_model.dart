@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// Model representing a pilgrim's registration profile.
 class RegistrationProfile {
   final String name;
