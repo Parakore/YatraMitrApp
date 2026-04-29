@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yatramitra/features/weather/model/weather_models.dart';
-import 'package:yatramitra/core/theme/app_colors.dart';
+import '../../model/weather_models.dart';
+import '../../../../core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
+import '../../utils/weather_utils.dart';
 
 class ForecastList extends StatelessWidget {
   final List<ForecastModel> forecasts;
@@ -19,29 +20,43 @@ class ForecastList extends StatelessWidget {
           final forecast = forecasts[index];
           return Container(
             width: 90,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
+            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.surface, width: 1),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  DateFormat('E').format(forecast.date),
+                  DateFormat('EEE').format(forecast.date).toUpperCase(),
                   style: const TextStyle(
-                      fontSize: 12, color: AppColors.textSecondary),
+                    fontSize: 10,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                _getWeatherIcon(forecast.condition),
+                Icon(
+                  WeatherUtils.getWeatherIcon(forecast.condition),
+                  color: AppColors.secondary,
+                  size: 28,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   '${forecast.temperature.toStringAsFixed(0)}°',
                   style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ],
             ),
@@ -49,28 +64,5 @@ class ForecastList extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Widget _getWeatherIcon(String condition) {
-    IconData icon;
-    Color color;
-    switch (condition.toLowerCase()) {
-      case 'rain':
-        icon = Icons.umbrella;
-        color = Colors.blue;
-        break;
-      case 'clouds':
-        icon = Icons.cloud;
-        color = Colors.grey;
-        break;
-      case 'clear':
-        icon = Icons.wb_sunny;
-        color = Colors.orange;
-        break;
-      default:
-        icon = Icons.wb_cloudy_outlined;
-        color = AppColors.secondary;
-    }
-    return Icon(icon, color: color, size: 24);
   }
 }

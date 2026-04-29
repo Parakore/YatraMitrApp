@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yatramitra/features/weather/model/weather_models.dart';
+import '../../model/weather_models.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../utils/weather_utils.dart';
 
 class CurrentWeatherCard extends StatelessWidget {
   final WeatherIntelligence intelligence;
@@ -11,19 +12,22 @@ class CurrentWeatherCard extends StatelessWidget {
     final weather = intelligence.current;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.secondary,
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          colors: [AppColors.secondary, AppColors.blueDark],
+        gradient: LinearGradient(
+          colors: [
+            AppColors.secondary,
+            AppColors.secondary.withValues(alpha: 0.85),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary.withAlpha(80),
+            color: AppColors.secondary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -34,32 +38,43 @@ class CurrentWeatherCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    weather.location,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    '${weather.temperature.toStringAsFixed(0)}°C',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 56,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -2,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      weather.location,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900),
                     ),
-                  ),
-                  Text(
-                    weather.condition,
-                    style: const TextStyle(color: Colors.white70, fontSize: 18),
-                  ),
-                ],
+                    Text(
+                      '${weather.temperature.toStringAsFixed(0)}°C',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 64,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -2,
+                      ),
+                    ),
+                    Text(
+                      weather.condition.toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const Icon(Icons.cloudy_snowing, size: 80, color: Colors.white),
+              Icon(
+                WeatherUtils.getWeatherIcon(weather.condition),
+                size: 80,
+                color: Colors.white,
+              ),
             ],
           ),
           const SizedBox(height: 24),
