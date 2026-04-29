@@ -108,7 +108,7 @@ class HomeViewModel extends _$HomeViewModel {
         QuickAction(
           title: 'Register/\nStatus',
           iconPath: 'assets/images/icons/register_status.png',
-          route: '/registration',
+          route: AppRouter.officialRegistration,
           color: AppColors.primary,
           isFuture: false,
         ),

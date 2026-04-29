@@ -338,7 +338,7 @@ class DhamDetailScreen extends ConsumerWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () => context.push(AppRouter.registration),
+            onPressed: () => context.push(AppRouter.officialRegistration),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -866,8 +866,7 @@ class DhamDetailScreen extends ConsumerWidget {
           Expanded(
             flex: 3,
             child: ElevatedButton(
-              onPressed: () => context.push(
-                  isRegistered ? AppRouter.myRegistration : AppRouter.registration),
+              onPressed: () => context.push(AppRouter.officialRegistration),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -878,7 +877,7 @@ class DhamDetailScreen extends ConsumerWidget {
                 shadowColor: AppColors.primary.withValues(alpha: 0.4),
               ),
               child: Text(
-                isRegistered ? 'View Registration' : 'Register Now',
+                'Yatra Registration',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w900,

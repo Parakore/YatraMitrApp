@@ -26,6 +26,10 @@ class AppColors {
   static const Color blueDark = Color(0xFF0D1B2A);
   static const Color purple = Color(0xFF6F42C1);
   static const Color teal = Color(0xFF17A2B8);
+  
+  // UI Elements
+  static const Color divider = Color(0xFFE0E0E0);
+  static const Color accent = Color(0xFFFF7A00); // Matches primary for consistency
 
   // Private constructor to prevent instantiation
   AppColors._();

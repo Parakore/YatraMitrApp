@@ -35,6 +35,7 @@ To ensure UI consistency and reduce code duplication, standardized custom widget
 6. **Grievance Redressal**: Geo-evidence based complaint system featuring a 5-step 'Mission Control' workflow. Includes AI department allocation, SLA tracking, and photo evidence upload via Camera/Gallery for real-time status updates.
 7. **Navigation & Maps**: Offline-first mapping system with recommended pilgrim routes and offline mode indicators.
 8. **Yatra Planner**: Advanced offline-first trip organizer with user preferences (Transport, Pace) and AI-generated day-wise itineraries.
+9. **Registration**: Dual-mode registration system. Handles **Local Profile** (internal state) and **Official Government Yatra Registration** (via secure WebView dashboard and official WhatsApp integration).
 ```
 
 ## 🔄 Data Flow
