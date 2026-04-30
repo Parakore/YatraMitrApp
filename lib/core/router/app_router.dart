@@ -176,7 +176,10 @@ class AppRouter {
       ),
       GoRoute(
         path: officialRegistrationWebView,
-        builder: (context, state) => const RegistrationWebView(),
+        builder: (context, state) {
+          final initialUrl = state.extra as String?;
+          return RegistrationWebView(initialUrl: initialUrl);
+        },
       ),
       GoRoute(
         path: yatraPlanner,

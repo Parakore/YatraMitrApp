@@ -55,6 +55,11 @@ class RegistrationScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 40),
             _buildSafetyNote(),
+            const SizedBox(height: 40),
+            _buildPostRegistrationTools(context),
+            const SizedBox(height: 40),
+            _buildOfficialHelplines(),
+            const SizedBox(height: 40),
           ],
         ),
       ),
@@ -175,6 +180,181 @@ class RegistrationScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPostRegistrationTools(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Already Registered?',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionCard(
+                title: 'Check Status',
+                icon: Icons.fact_check_rounded,
+                color: AppColors.success,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://registrationandtouristcare.uk.gov.in/verify_registration.php',
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildActionCard(
+                title: 'Download Card',
+                icon: Icons.download_for_offline_rounded,
+                color: AppColors.secondary,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://registrationandtouristcare.uk.gov.in/yatri_darshan_certificate.php',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionCard({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.1)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOfficialHelplines() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Official Helplines',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Column(
+            children: [
+              _buildHelplineItem(
+                title: 'Tourist Care Helpline',
+                number: '1364',
+                subtitle: 'Uttarakhand Tourism Support',
+                icon: Icons.headset_mic_rounded,
+              ),
+              const Divider(height: 1, indent: 60),
+              _buildHelplineItem(
+                title: 'Police Emergency',
+                number: '112',
+                subtitle: 'Immediate Police Assistance',
+                icon: Icons.local_police_rounded,
+                color: AppColors.error,
+              ),
+              const Divider(height: 1, indent: 60),
+              _buildHelplineItem(
+                title: 'Medical Help',
+                number: '108',
+                subtitle: 'Ambulance & Health Emergencies',
+                icon: Icons.emergency_rounded,
+                color: AppColors.success,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHelplineItem({
+    required String title,
+    required String number,
+    required String subtitle,
+    required IconData icon,
+    Color color = AppColors.secondary,
+  }) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color, size: 24),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(subtitle),
+      trailing: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.call, color: Colors.white, size: 14),
+            const SizedBox(width: 4),
+            Text(
+              number,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () => launchUrl(Uri.parse('tel:$number')),
     );
   }
 

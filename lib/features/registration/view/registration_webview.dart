@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yatramitra/shared/widgets/yatra_app_bar.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Embedded WebView for the official Uttarakhand Yatra Registration portal.
 class RegistrationWebView extends StatefulWidget {
-  const RegistrationWebView({super.key});
+  final String? initialUrl;
+  const RegistrationWebView({super.key, this.initialUrl});
 
   @override
   State<RegistrationWebView> createState() => _RegistrationWebViewState();
@@ -58,7 +60,8 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
             },
           ),
         )
-        ..loadRequest(Uri.parse('https://registrationandtouristcare.uk.gov.in/'));
+        ..loadRequest(Uri.parse(widget.initialUrl ??
+            'https://registrationandtouristcare.uk.gov.in/'));
     } catch (e) {
       debugPrint('Error initializing WebView: $e');
       _isSupported = false;
@@ -70,11 +73,8 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Official Portal'),
-        backgroundColor: AppColors.surface,
-        foregroundColor: AppColors.textPrimary,
-        elevation: 0,
+      appBar: YatraAppBar(
+        title: 'Official Portal',
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
@@ -86,33 +86,37 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
           ),
         ],
       ),
-      body: !_isSupported ? _buildWebFallback() : Stack(
-        children: [
-          if (_controller != null) WebViewWidget(controller: _controller!),
-          if (_isLoading)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: LinearProgressIndicator(
-                value: _progress > 0 ? _progress : null,
-                backgroundColor: AppColors.divider,
-                color: AppColors.secondary,
-                minHeight: 3,
-              ),
+      body: !_isSupported
+          ? _buildWebFallback()
+          : Stack(
+              children: [
+                if (_controller != null)
+                  WebViewWidget(controller: _controller!),
+                if (_isLoading)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: LinearProgressIndicator(
+                      value: _progress > 0 ? _progress : null,
+                      backgroundColor: AppColors.divider,
+                      color: AppColors.secondary,
+                      minHeight: 3,
+                    ),
+                  ),
+                if (_isLoading && _progress == 0)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
             ),
-          if (_isLoading && _progress == 0)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-        ],
-      ),
       bottomNavigationBar: _isSupported ? _buildNavigationControls() : null,
     );
   }
 
   void _openInBrowser() async {
-    final url = Uri.parse('https://registrationandtouristcare.uk.gov.in/');
+    final url = Uri.parse(
+        widget.initialUrl ?? 'https://registrationandtouristcare.uk.gov.in/');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }
@@ -125,7 +129,8 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.language_rounded, size: 80, color: AppColors.secondary),
+            const Icon(Icons.language_rounded,
+                size: 80, color: AppColors.secondary),
             const SizedBox(height: 24),
             const Text(
               'Official Registration Portal',
@@ -146,8 +151,10 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
               ),
             ),
           ],
@@ -187,7 +194,8 @@ class _RegistrationWebViewState extends State<RegistrationWebView> {
           IconButton(
             icon: const Icon(Icons.home_rounded),
             onPressed: () => _controller?.loadRequest(
-              Uri.parse('https://registrationandtouristcare.uk.gov.in/'),
+              Uri.parse(widget.initialUrl ??
+                  'https://registrationandtouristcare.uk.gov.in/'),
             ),
           ),
         ],
