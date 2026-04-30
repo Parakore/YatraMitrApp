@@ -97,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
               final isRegistered = await repository.isRegistered();
               if (context.mounted) {
                 if (isRegistered) {
-                  context.push(AppRouter.myRegistration);
+                  context.push(AppRouter.officialRegistration);
                 } else {
                   context.push(AppRouter.registration);
                 }

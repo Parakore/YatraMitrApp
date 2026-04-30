@@ -364,7 +364,7 @@ class DhamDetailScreen extends ConsumerWidget {
         if (isRegistered) ...[
           const SizedBox(height: 12),
           TextButton(
-            onPressed: () => context.push(AppRouter.myRegistration),
+            onPressed: () => context.push(AppRouter.officialRegistration),
             child: const Text(
               'Already Registered? View Details',
               style: TextStyle(
@@ -761,7 +761,6 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-
   Widget _buildQuickActions(BuildContext context, List<QuickAction> actions) {
     return SizedBox(
       height: 120,
@@ -810,10 +809,7 @@ class DhamDetailScreen extends ConsumerWidget {
     );
   }
 
-
   Widget _buildBottomActions(BuildContext context, WidgetRef ref) {
-    final isRegistered = ref.watch(isUserRegisteredProvider).value ?? false;
-
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       decoration: BoxDecoration(
