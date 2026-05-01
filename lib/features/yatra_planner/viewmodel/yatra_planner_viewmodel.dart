@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/yatra_plan.dart';
 import '../repository/yatra_planner_repository.dart';
-import '../service/itinerary_generator.dart';
 import 'package:uuid/uuid.dart';
 
 part 'yatra_planner_viewmodel.g.dart';
@@ -80,8 +79,8 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
     ));
     
     try {
-      // Simulate the 6-step workflow with delays
-      for (int i = 2; i <= 6; i++) {
+      // Step 1-4: Simulation for UX (Analyzing, Route, Stays, Weather)
+      for (int i = 2; i <= 4; i++) {
         await Future.delayed(const Duration(milliseconds: 800));
         state = AsyncData(state.value!.copyWith(workflowStep: i));
       }
@@ -104,7 +103,14 @@ class YatraPlannerViewModel extends _$YatraPlannerViewModel {
         status: 'Generated',
       );
 
-      final itinerary = ItineraryGenerator.generate(basePlan);
+      // Step 5: Real AI Analysis
+      state = AsyncData(state.value!.copyWith(workflowStep: 5));
+      final itinerary = await repository.generateAiItinerary(basePlan);
+      
+      // Step 6: Finalizing Plan
+      state = AsyncData(state.value!.copyWith(workflowStep: 6));
+      await Future.delayed(const Duration(milliseconds: 500));
+      
       final finalPlan = basePlan.copyWith(itinerary: itinerary);
 
       await repository.savePlan(finalPlan);
