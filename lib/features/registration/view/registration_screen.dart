@@ -60,6 +60,10 @@ class RegistrationScreen extends ConsumerWidget {
             const SizedBox(height: 40),
             _buildOfficialHelplines(),
             const SizedBox(height: 40),
+            _buildCapacityPlanning(context),
+            const SizedBox(height: 40),
+            _buildOfficialBookings(context),
+            const SizedBox(height: 40),
           ],
         ),
       ),
@@ -205,7 +209,8 @@ class RegistrationScreen extends ConsumerWidget {
                 color: AppColors.success,
                 onTap: () => context.push(
                   AppRouter.officialRegistrationWebView,
-                  extra: 'https://registrationandtouristcare.uk.gov.in/verify_registration.php',
+                  extra:
+                      'https://registrationandtouristcare.uk.gov.in/verify_registration.php',
                 ),
               ),
             ),
@@ -217,7 +222,8 @@ class RegistrationScreen extends ConsumerWidget {
                 color: AppColors.secondary,
                 onTap: () => context.push(
                   AppRouter.officialRegistrationWebView,
-                  extra: 'https://registrationandtouristcare.uk.gov.in/yatri_darshan_certificate.php',
+                  extra:
+                      'https://registrationandtouristcare.uk.gov.in/yatri_darshan_certificate.php',
                 ),
               ),
             ),
@@ -355,6 +361,214 @@ class RegistrationScreen extends ConsumerWidget {
         ),
       ),
       onTap: () => launchUrl(Uri.parse('tel:$number')),
+    );
+  }
+
+  Widget _buildCapacityPlanning(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Planning & Capacity',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Column(
+            children: [
+              _buildPlanningItem(
+                context,
+                title: 'Check Slot Availability',
+                subtitle: 'View daily darshan token limits',
+                icon: Icons.event_available_rounded,
+                color: Colors.blue,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://registrationandtouristcare.uk.gov.in/',
+                ),
+              ),
+              const Divider(height: 32),
+              const Text(
+                'Kapaat Opening Dates 2026',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildOpeningDate('Kedarnath', '22 April 2026'),
+              _buildOpeningDate('Badrinath', '23 April 2026'),
+              _buildOpeningDate('Gangotri/Yamunotri', '19 April 2026'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanningItem(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  subtitle,
+                  style:
+                      TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOpeningDate(String dham, String date) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(dham, style: TextStyle(color: AppColors.textSecondary)),
+          Text(date, style: const TextStyle(fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOfficialBookings(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Official Bookings',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildServiceCard(
+                title: 'Heli Yatra',
+                subtitle: 'Official IRCTC',
+                icon: Icons.airplane_ticket,
+                color: Colors.orange,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://heliyatra.irctc.co.in/',
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildServiceCard(
+                title: 'GMVN Stay',
+                subtitle: 'Govt. Hotels',
+                icon: Icons.hotel_rounded,
+                color: Colors.teal,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://gmvnonline.com/trh-filter.php',
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildServiceCard(
+                title: 'Homestays',
+                subtitle: 'Local Stays',
+                icon: Icons.home_work_rounded,
+                color: Colors.purple,
+                onTap: () => context.push(
+                  AppRouter.officialRegistrationWebView,
+                  extra: 'https://uttarastays.com/',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildServiceCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.divider),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
